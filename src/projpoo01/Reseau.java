@@ -50,7 +50,16 @@ public class Reseau {
 		for(int i=1;i<=groupSize;i++) {
 			System.out.print("Client "+i+" : \nN°Client ? ");
 			String numClient=sc.nextLine();
-			String[] newP = saisieP(sc);
+			
+			String[] newP = {};
+			try{
+				newP = saisieP(sc);
+			} catch(IllegalArgumentException e) {
+				System.err.println(e.getMessage());
+				i--;//entrée non comptabilisée
+				continue;
+			}
+			
 			try {
 				clients.put(
 					numClient,
@@ -58,9 +67,10 @@ public class Reseau {
 				);
 				
 			} catch(IllegalArgumentException e) {//Map n'accpte pas 2 clés identique : unicité garantie
-				System.err.println("Impossible de créer le client.\n"
+				System.out.println("Impossible de créer le client.\n"
 					+ "Verifiez les informations saisies, le numero de client n'existe t'il pas déjà?");
 				i--;//entrée non comptabilisée
+				//continue;//not needed : end of loop
 			}
 		}
 	}
@@ -69,7 +79,16 @@ public class Reseau {
 		for(int i=1;i<=groupSize;i++) {
 			System.out.print("Fournisseur "+i+" :\nN°Fournisseur ? ");
 			String numFour=sc.nextLine();
-			String[] newP = saisieP(sc);
+			String[] newP = {};
+			
+			try{
+				newP = saisieP(sc);
+			} catch(IllegalArgumentException e) {
+				System.out.println(e.getMessage());
+				i--;//entrée non comptabilisée
+				continue;
+			}
+			
 			try {
 				fournisseurs.put(
 					numFour,
@@ -77,9 +96,10 @@ public class Reseau {
 				);
 				
 			} catch(IllegalArgumentException e) {//Map n'accpte pas 2 clés identique : unicité garantie
-				System.err.println("Impossible de créer le client.\n"
+				System.out.println("Impossible de créer le client.\n"
 					+ "Verifiez les informations saisies, le numero de fournisseur n'existe t'il pas déjà?");
 				i--;//entrée non comptabilisée
+				//continue;//not needed : end of loop
 			}
 		}
 		
@@ -89,25 +109,40 @@ public class Reseau {
 		for(int i=1;i<=groupSize;i++) {
 			System.out.print("Salarié "+i+" :\nN° de securité sociale ? ");
 			String insee=sc.nextLine();
+			if(!Format.checkInsee(insee)) {
+				System.out.println("Numero de securité sociale invalide, 13 chiffres requis!");
+				i--;//entrée non comptabilisée
+				continue;
+			}  
 			
 			System.out.print("Salaire (precision max 0,01€)? ");
 			String salaire=sc.nextLine();
-			try {//test fraction de centimes
-				double salaireFormaté= Double.parseDouble(salaire.replace(',', '.'));
+			double salaireFormaté=0;
+			try {//test centimes
+				salaireFormaté = Double.parseDouble(salaire.replace(',', '.'));
 				new DecimalFormat("###,###,###.00").format(salaireFormaté);
-				String[] newP = saisieP(sc);
-				salaries.add( new Salarie(newP[0], newP[1], newP[2], newP[3], newP[4], insee, salaireFormaté) );
 			} catch (ArithmeticException e) {
-				System.err.println("Format de salaire non supporté.\n"
-					+ "éessayer s'il vous plait");
+				System.out.println("Format de salaire non supporté : XXXXXX.XX uniquement");
 				i--;//entrée non comptabilisée
+				continue;
 			}
+			
+			String[] newP = {};
+			try{
+				newP = saisieP(sc);
+			} catch(IllegalArgumentException e) {
+				System.out.println(e.getMessage());
+				i--;//entrée non comptabilisée
+				continue;
+			}
+			salaries.add( new Salarie(newP[0], newP[1], newP[2], newP[3], newP[4], insee, salaireFormaté) );
+			
 			
 		}
 		
 	}
 	
-	private String[] saisieP(Scanner sc) {
+	private String[] saisieP(Scanner sc) throws IllegalArgumentException {
 		System.out.print("Nom ? ");
 		String n = sc.nextLine();
 		
@@ -119,6 +154,9 @@ public class Reseau {
 		
 		System.out.print("Code Postal ? ");
 		String cp = sc.nextLine();
+		if(!Format.checkCP(cp)) {
+			throw new IllegalArgumentException("Code postal invalide, 5 chiffres requis");
+		}
 		
 		System.out.print("Ville ? ");
 		String v = sc.nextLine();
