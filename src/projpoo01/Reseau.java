@@ -107,36 +107,26 @@ public class Reseau {
 
 	private void saisieS(int groupSize, Scanner sc) {
 		for(int i=1;i<=groupSize;i++) {
-			System.out.print("Salarié "+i+" :\nN° de securité sociale ? ");
-			String insee=sc.nextLine();
-			if(!Format.checkInsee(insee)) {
-				System.out.println("Numero de securité sociale invalide, 13 chiffres requis!");
-				i--;//entrée non comptabilisée
-				continue;
-			}  
-			
-			System.out.print("Salaire (precision max 0,01€)? ");
-			String salaire=sc.nextLine();
-			double salaireFormaté=0;
-			try {//test centimes
-				salaireFormaté = Double.parseDouble(salaire.replace(',', '.'));
-				new DecimalFormat("###,###,###.00").format(salaireFormaté);
-			} catch (ArithmeticException e) {
-				System.out.println("Format de salaire non supporté : XXXXXX.XX uniquement");
-				i--;//entrée non comptabilisée
-				continue;
-			}
-			
-			String[] newP = {};
 			try{
-				newP = saisieP(sc);
+				System.out.print("Salarié "+i+" :\nN° de securité sociale ? ");
+			
+				String insee=sc.nextLine();
+				Format.checkInsee(insee) ; 
+				
+				System.out.print("Salaire (precision max 0,01€)? ");
+				String salaire=sc.nextLine();
+				double salaireFormaté= Format.checkSalaire(salaire);
+				
+			
+				String[] newP = saisieP(sc);
+				
+				salaries.add( new Salarie(newP[0], newP[1], newP[2], newP[3], newP[4], insee, salaireFormaté) );
+				
 			} catch(IllegalArgumentException e) {
 				System.out.println(e.getMessage());
 				i--;//entrée non comptabilisée
 				continue;
 			}
-			salaries.add( new Salarie(newP[0], newP[1], newP[2], newP[3], newP[4], insee, salaireFormaté) );
-			
 			
 		}
 		
@@ -154,9 +144,7 @@ public class Reseau {
 		
 		System.out.print("Code Postal ? ");
 		String cp = sc.nextLine();
-		if(!Format.checkCP(cp)) {
-			throw new IllegalArgumentException("Code postal invalide, 5 chiffres requis");
-		}
+		Format.checkCP(cp);
 		
 		System.out.print("Ville ? ");
 		String v = sc.nextLine();
