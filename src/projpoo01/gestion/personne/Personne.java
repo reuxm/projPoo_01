@@ -17,6 +17,8 @@ public class Personne {
 		this.codePostal = codePostal;
 	}
 
+	// === From Object ===
+	
 	@Override
 	public String toString() {
 		return "prenom :" + getFirstName()
@@ -25,7 +27,8 @@ public class Personne {
 		+ ", code postal" + getCodePostal();
 	}
 	
-	//only getters & setters bellow
+	// === getters & setters ===
+	
 	public String getFirstName() {
 		return firstName;
 	}

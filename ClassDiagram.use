@@ -1,0 +1,63 @@
+model Exemple
+
+class IPatron
+operations
+	embauche()
+	paie()
+	liscencie()
+end
+
+class IClient
+operations
+	achete()
+	paie()
+end
+
+class IFournisseur
+operations
+	livre()
+	paie()
+end
+
+class Personne
+attributes
+	Nom : String
+	Prenom : String
+	Adress : String
+	Ville : String
+	CodePostal : String
+end
+
+class Client < Personne, IClient, IFournisseur
+attributes
+	NumClient : String
+end
+
+class Fournisseur < Personne, IClient, IFournisseur
+attributes
+	NumFour : String
+end
+
+class Salarie < Personne, IClient, IFournisseur, IPatron
+attributes
+	Insee : String
+	Salaire : Real
+end
+
+class Reseau
+end
+
+association clients between
+	Reseau [1]
+	Client [*] role clients
+end
+
+association fournisseurs between
+	Reseau [1]
+	Fournisseur [*] role fournisseurs
+end
+
+association salaries between
+	Reseau [1]
+	Salarie [*] role salaries
+end
