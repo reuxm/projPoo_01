@@ -1,0 +1,26 @@
+model Exemple
+
+class Personne
+attributes
+	Nom : String
+	Prenom : String
+	Adress : String
+	Ville : String
+	CodePostal : String
+end
+
+class Client < Personne
+attributes
+	NumClient : String
+end
+
+class Fournisseur < Personne
+attributes
+	NumFour : String
+end
+
+class Salarie < Personne
+attributes
+	Insee : String
+	Salaire : Real
+end
