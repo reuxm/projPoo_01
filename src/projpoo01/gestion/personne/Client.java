@@ -2,9 +2,13 @@ package projpoo01.gestion.personne;
 
 import java.util.List;
 
+import projpoo01.gestion.item.Achat;
+import projpoo01.gestion.item.Commande;
+
 public class Client extends Personne implements IClient, IFournisseur {
 
 	private String num;
+	private boolean fournisseur;
 	
 	public Client(String firstName, String lastName, String adresse, String vill,
 			String codePostal, String numClient) throws IllegalArgumentException {
@@ -34,6 +38,11 @@ public class Client extends Personne implements IClient, IFournisseur {
 		
 	}
 
+	@Override
+	public boolean isFournisseur() {
+		return this.fournisseur;
+	}
+
 	// === From IClient ===
 	
 	@Override
@@ -46,5 +55,10 @@ public class Client extends Personne implements IClient, IFournisseur {
 	public boolean paie() {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+	@Override
+	public boolean isClient() {
+		return true;//un client est toujours client
 	}
 }

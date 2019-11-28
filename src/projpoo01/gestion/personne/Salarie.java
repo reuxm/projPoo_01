@@ -3,10 +3,15 @@ package projpoo01.gestion.personne;
 import java.text.DecimalFormat;
 import java.util.List;
 
+import projpoo01.gestion.item.Achat;
+import projpoo01.gestion.item.Commande;
+
 public class Salarie extends Personne implements IClient, IFournisseur {
 
 	private String insee;
 	private double salaire;
+	private boolean fournisseur;
+	private boolean client;
 	
 	public Salarie(String firstName, String lastName, String adresse,
 			String vill, String codePostal, String insee, double salaire) {
@@ -53,6 +58,16 @@ public class Salarie extends Personne implements IClient, IFournisseur {
 	public boolean paie() {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+	@Override
+	public boolean isFournisseur() {
+		return this.fournisseur;
+	}
+
+	@Override
+	public boolean isClient() {
+		return this.client;
 	}
 
 }
