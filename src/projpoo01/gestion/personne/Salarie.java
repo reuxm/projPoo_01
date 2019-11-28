@@ -13,11 +13,13 @@ public class Salarie extends Personne implements IClient, IFournisseur {
 	private boolean fournisseur;
 	private boolean client;
 	
-	public Salarie(String firstName, String lastName, String adresse,
-			String vill, String codePostal, String insee, double salaire) {
+	public Salarie(String firstName, String lastName, String adresse, String vill, 
+			String codePostal, String insee, double salaire, boolean client, boolean fournisseur) {
 		super(firstName, lastName, adresse, vill, codePostal);
 		this.insee = insee;
 		this.salaire = salaire;
+		this.client=client;
+		this.fournisseur=fournisseur;
 	}
 	
 	public String getSalaire() { //et formate    

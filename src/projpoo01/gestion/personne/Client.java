@@ -11,9 +11,10 @@ public class Client extends Personne implements IClient, IFournisseur {
 	private boolean fournisseur;
 	
 	public Client(String firstName, String lastName, String adresse, String vill,
-			String codePostal, String numClient) throws IllegalArgumentException {
+			String codePostal, String numClient, boolean fournisseur) {
 		super(firstName, lastName, adresse, vill, codePostal);
 		this.num = numClient;
+		this.fournisseur=fournisseur;
 	}
 	
 	// === From Object ===

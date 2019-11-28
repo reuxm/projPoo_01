@@ -2,9 +2,10 @@ package projpoo01.gestion.personne;
 
 public class Patron extends Salarie implements IPatron {
 
-	public Patron(String firstName, String lastName, String adresse, String vill, String codePostal, String insee,
-			double salaire) {
-		super(firstName, lastName, adresse, vill, codePostal, insee, salaire);
+	public Patron(String firstName, String lastName, String adresse, String vill,
+			String codePostal, String insee,
+			double salaire, boolean client, boolean fournisseur) {
+		super(firstName, lastName, adresse, vill, codePostal, insee, salaire, client, fournisseur);
 		// TODO Auto-generated constructor stub
 	}
 

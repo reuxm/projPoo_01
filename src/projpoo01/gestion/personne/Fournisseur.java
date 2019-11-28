@@ -10,11 +10,11 @@ public class Fournisseur extends Personne implements IClient, IFournisseur {
 	private String num;
 	private boolean client;
 
-	public Fournisseur(String firstName, String lastName, String adresse,
-			String vill, String codePostal, String numFour) {
+	public Fournisseur(String firstName, String lastName, String adresse, String vill, 
+			String codePostal, String numFour, boolean client) {
 		super(firstName, lastName, adresse, vill, codePostal);
-		
 		this.num = numFour;
+		this.client=client;
 	}
 	
 	// === From Object ===
