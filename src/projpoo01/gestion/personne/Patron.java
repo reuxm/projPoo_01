@@ -8,6 +8,13 @@ public class Patron extends Salarie implements IPatron {
 		super(firstName, lastName, adresse, vill, codePostal, insee, salaire, client, fournisseur);
 		// TODO Auto-generated constructor stub
 	}
+	
+	// === From Object ===
+	
+	@Override
+	public String toString() {
+		return super.toString()+( (client||fournisseur)?", ":" role suplementaire : " )+"patron";
+	}
 
 	// === From IPatron ===
 	
