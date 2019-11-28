@@ -1,6 +1,5 @@
 package projpoo01;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -8,6 +7,7 @@ import java.util.Map;
 import java.util.Scanner;
 
 import projpoo01.gestion.personne.*;
+import projpoo01.validity.Format;
 
 public class Reseau {
 
@@ -51,16 +51,8 @@ public class Reseau {
 			System.out.print("Client "+i+" : \nN°Client ? ");
 			String numClient=sc.nextLine();
 			
-			String[] newP = {};
 			try{
-				newP = saisieP(sc);
-			} catch(IllegalArgumentException e) {
-				System.err.println(e.getMessage());
-				i--;//entrée non comptabilisée
-				continue;
-			}
-			
-			try {
+				String[] newP = saisieP(sc);
 				clients.put(
 					numClient,
 					new Client(newP[0], newP[1], newP[2], newP[3], newP[4], numClient)
@@ -70,7 +62,6 @@ public class Reseau {
 				System.out.println("Impossible de créer le client.\n"
 					+ "Verifiez les informations saisies, le numero de client n'existe t'il pas déjà?");
 				i--;//entrée non comptabilisée
-				//continue;//not needed : end of loop
 			}
 		}
 	}
@@ -79,17 +70,8 @@ public class Reseau {
 		for(int i=1;i<=groupSize;i++) {
 			System.out.print("Fournisseur "+i+" :\nN°Fournisseur ? ");
 			String numFour=sc.nextLine();
-			String[] newP = {};
-			
 			try{
-				newP = saisieP(sc);
-			} catch(IllegalArgumentException e) {
-				System.out.println(e.getMessage());
-				i--;//entrée non comptabilisée
-				continue;
-			}
-			
-			try {
+				String[] newP = saisieP(sc);
 				fournisseurs.put(
 					numFour,
 					new Fournisseur(newP[0], newP[1], newP[2], newP[3], newP[4], numFour)
@@ -99,7 +81,6 @@ public class Reseau {
 				System.out.println("Impossible de créer le client.\n"
 					+ "Verifiez les informations saisies, le numero de fournisseur n'existe t'il pas déjà?");
 				i--;//entrée non comptabilisée
-				//continue;//not needed : end of loop
 			}
 		}
 		
@@ -125,7 +106,6 @@ public class Reseau {
 			} catch(IllegalArgumentException e) {
 				System.out.println(e.getMessage());
 				i--;//entrée non comptabilisée
-				continue;
 			}
 			
 		}

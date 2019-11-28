@@ -1,4 +1,4 @@
-package projpoo01;
+package projpoo01.validity;
 
 import java.text.DecimalFormat;
 
@@ -24,9 +24,9 @@ public class Format {
 		} catch (NumberFormatException e) {
 			b = true;
 		}
-		b|=insee.length()!=13;
+		b |= insee.length()!=13;
 		if(b) {
-			System.out.println("Numero de securité sociale invalide, 13 chiffres requis!");
+			throw new IllegalArgumentException("Numero de securité sociale invalide, 13 chiffres requis!");
 		}
 	}
 	
