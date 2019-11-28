@@ -1,29 +1,26 @@
 package projpoo01;
 
-import java.text.DecimalFormat;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
 import projpoo01.gestion.personne.*;
+import projpoo01.validity.*;
 
 public class Reseau {
 
 	private Map<String, Client> clients;
 	private Map<String, Fournisseur> fournisseurs;
-	private List<Salarie> salaries;
+	private Map<String, Salarie> salaries;
 
 	public Reseau() {
 		clients = new HashMap<String, Client>();
 		fournisseurs = new HashMap<String, Fournisseur>();
-		salaries = new ArrayList<Salarie>();
+		salaries = new HashMap<String, Salarie>();
 	}
 	
 	public static void main(String[] args) {
 		Reseau reseau = new Reseau();
-		
 		reseau.saisie();
 		System.out.println(reseau);
 	}
@@ -35,104 +32,79 @@ public class Reseau {
 		for( String categorie:categories) {
 			System.out.print("Combien de "+categorie+"(s) ? : ");
 			int groupSize = sc.nextInt();
-			sc.nextLine();//conscome le EOL laissé par le nextInt() precedant
+			sc.nextLine();//conssome le EOL laissé par le nextInt() precedent
 			switch(categorie) {
-			case "salarié":saisieS(groupSize, sc);break;
-			case "client":saisieC(groupSize, sc);break;
-			default:saisieF(groupSize ,sc);//default vaut toujours fournisseur
+				case "salarié":saisieS(groupSize, sc);break;
+				case "client":saisieC(groupSize, sc);break;
+				default:saisieF(groupSize ,sc);//default vaut toujours fournisseur, voir String[] categories
 			}
 		}
-		
 		sc.close();
 	}
 
 	private void saisieC(int groupSize, Scanner sc) {
 		for(int i=1;i<=groupSize;i++) {
-			System.out.print("Client "+i+" : \nN°Client ? ");
-			String numClient=sc.nextLine();
-			
-			String[] newP = {};
 			try{
-				newP = saisieP(sc);
-			} catch(IllegalArgumentException e) {
-				System.err.println(e.getMessage());
-				i--;//entrée non comptabilisée
-				continue;
-			}
-			
-			try {
+				System.out.print("Client "+i+" : \nN°Client ? ");
+				String numClient=sc.nextLine();
+				Format.checkPK(numClient, clients.keySet(), "numero Client");//Contrainte : unicité
+				
+				String[] newP = saisieP(sc);
 				clients.put(
 					numClient,
 					new Client(newP[0], newP[1], newP[2], newP[3], newP[4], numClient)
 				);
-				
-			} catch(IllegalArgumentException e) {//Map n'accpte pas 2 clés identique : unicité garantie
-				System.out.println("Impossible de créer le client.\n"
-					+ "Verifiez les informations saisies, le numero de client n'existe t'il pas déjà?");
+			} catch (FormatException e) {
+				System.out.println(e.getMessage());
 				i--;//entrée non comptabilisée
-				//continue;//not needed : end of loop
 			}
 		}
 	}
 
 	private void saisieF(int groupSize, Scanner sc) {
 		for(int i=1;i<=groupSize;i++) {
-			System.out.print("Fournisseur "+i+" :\nN°Fournisseur ? ");
-			String numFour=sc.nextLine();
-			String[] newP = {};
-			
 			try{
-				newP = saisieP(sc);
-			} catch(IllegalArgumentException e) {
-				System.out.println(e.getMessage());
-				i--;//entrée non comptabilisée
-				continue;
-			}
-			
-			try {
+				System.out.print("Fournisseur "+i+" :\nN°Fournisseur ? ");
+				String numFour=sc.nextLine();
+				Format.checkPK(numFour, fournisseurs.keySet(), "numero Fournissuer");//Contrainte : unicité
+				
+				String[] newP = saisieP(sc);
 				fournisseurs.put(
 					numFour,
 					new Fournisseur(newP[0], newP[1], newP[2], newP[3], newP[4], numFour)
 				);
-				
-			} catch(IllegalArgumentException e) {//Map n'accpte pas 2 clés identique : unicité garantie
-				System.out.println("Impossible de créer le client.\n"
-					+ "Verifiez les informations saisies, le numero de fournisseur n'existe t'il pas déjà?");
+			} catch (FormatException e) {
+				System.out.println(e.getMessage());
 				i--;//entrée non comptabilisée
-				//continue;//not needed : end of loop
 			}
 		}
-		
 	}
 
 	private void saisieS(int groupSize, Scanner sc) {
 		for(int i=1;i<=groupSize;i++) {
 			try{
 				System.out.print("Salarié "+i+" :\nN° de securité sociale ? ");
-			
 				String insee=sc.nextLine();
-				Format.checkInsee(insee) ; 
+				Format.checkInsee(insee) ;//Contrainte : 13 chiffres 
+				Format.checkPK(insee, salaries.keySet(), "numero de securite sociale");//Contrainte : unicité
 				
 				System.out.print("Salaire (precision max 0,01€)? ");
 				String salaire=sc.nextLine();
 				double salaireFormaté= Format.checkSalaire(salaire);
 				
-			
 				String[] newP = saisieP(sc);
-				
-				salaries.add( new Salarie(newP[0], newP[1], newP[2], newP[3], newP[4], insee, salaireFormaté) );
-				
-			} catch(IllegalArgumentException e) {
+				salaries.put(
+					insee,
+					new Salarie(newP[0], newP[1], newP[2], newP[3], newP[4], insee, salaireFormaté)
+				);
+			} catch(FormatException e) {
 				System.out.println(e.getMessage());
 				i--;//entrée non comptabilisée
-				continue;
-			}
-			
+			} 
 		}
-		
 	}
 	
-	private String[] saisieP(Scanner sc) throws IllegalArgumentException {
+	private String[] saisieP(Scanner sc) throws FormatException {
 		System.out.print("Nom ? ");
 		String n = sc.nextLine();
 		
@@ -144,7 +116,7 @@ public class Reseau {
 		
 		System.out.print("Code Postal ? ");
 		String cp = sc.nextLine();
-		Format.checkCP(cp);
+		Format.checkCP(cp);//Contrainte : 5 chiffres
 		
 		System.out.print("Ville ? ");
 		String v = sc.nextLine();
@@ -155,20 +127,17 @@ public class Reseau {
 	
 	@Override
 	public String toString() {
-		String print = "\n### Contacts du réseau :\n"
-				
+		String print = "\n### Contacts du réseau :\n"		
 		//salariés
 			+ "Nombre de salariés : "+salaries.size();
-		for(Salarie s : salaries) {
+		for(Salarie s : salaries.values()) {
 			print += "\n\t"+s.toString();
 		}
-		
 		//clients
 		print += "\n\nNombre de clients : "+clients.size();
 		for(Client c : clients.values()) {
 			print += "\n\t"+c.toString();
 		}
-		
 		//fournissuers
 		print += "\n\nNombre de clients : "+clients.size();
 		for(Fournisseur f : fournisseurs.values()) {

@@ -1,6 +1,6 @@
 package projpoo01.gestion.personne;
 
-public class Personne {
+public abstract class Personne {
 
 	private String firstName;
 	private String lastName;
@@ -21,10 +21,11 @@ public class Personne {
 	
 	@Override
 	public String toString() {
-		return "prenom :" + getFirstName()
-		+ ", nom :" + getLastName() + ", adresse :"
-		+ getAdresse() + ", ville :" + getVill()
-		+ ", code postal" + getCodePostal();
+		return "prenom : " + getFirstName()
+		+ ", nom : " + getLastName()
+		+ ", adresse : "+ getAdresse()
+		+ ", ville : " + getVill()
+		+ ", code postal : " + getCodePostal();
 	}
 	
 	// === getters & setters ===
