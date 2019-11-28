@@ -50,9 +50,13 @@ public class Reseau {
 				Format.checkPK(numClient, clients.keySet(), "numero Client");//Contrainte : unicité
 				
 				String[] newP = saisieP(sc);
+				
+				System.out.println("Ce client est-il aussi un fournisseur ? [Y:N]");
+				String fournisseur = sc.nextLine();
+				boolean f = Format.checkBoolean(fournisseur);
 				clients.put(
 					numClient,
-					new Client(newP[0], newP[1], newP[2], newP[3], newP[4], numClient)
+					new Client(newP[0], newP[1], newP[2], newP[3], newP[4], numClient, f)
 				);
 			} catch (FormatException e) {
 				System.out.println(e.getMessage());
@@ -69,9 +73,13 @@ public class Reseau {
 				Format.checkPK(numFour, fournisseurs.keySet(), "numero Fournissuer");//Contrainte : unicité
 				
 				String[] newP = saisieP(sc);
+				
+				System.out.println("Ce fournissseur est-il aussi un client ? [Y:N]");
+				String client = sc.nextLine();
+				boolean c = Format.checkBoolean(client);
 				fournisseurs.put(
 					numFour,
-					new Fournisseur(newP[0], newP[1], newP[2], newP[3], newP[4], numFour)
+					new Fournisseur(newP[0], newP[1], newP[2], newP[3], newP[4], numFour, c)
 				);
 			} catch (FormatException e) {
 				System.out.println(e.getMessage());
@@ -93,9 +101,18 @@ public class Reseau {
 				double salaireFormaté= Format.checkSalaire(salaire);
 				
 				String[] newP = saisieP(sc);
+				
+				System.out.println("Ce fournissseur est-il aussi un client ? [Y:N]");
+				String client = sc.nextLine();
+				boolean c = Format.checkBoolean(client);
+				
+				System.out.println("Ce client est-il aussi un fournisseur ? [Y:N]");
+				String fournisseur = sc.nextLine();
+				boolean f = Format.checkBoolean(fournisseur);
+				
 				salaries.put(
 					insee,
-					new Salarie(newP[0], newP[1], newP[2], newP[3], newP[4], insee, salaireFormaté)
+					new Salarie(newP[0], newP[1], newP[2], newP[3], newP[4], insee, salaireFormaté, c, f)
 				);
 			} catch(FormatException e) {
 				System.out.println(e.getMessage());

@@ -5,43 +5,25 @@ public class Client extends Personne implements IClient, IFournisseur {
 	private String num;
 	
 	public Client(String firstName, String lastName, String adresse, String vill,
-			String codePostal, String numClient) throws IllegalArgumentException {
+			String codePostal, String numClient, boolean fournisseur) {
 		super(firstName, lastName, adresse, vill, codePostal);
 		this.num = numClient;
+		this.fournisseur=fournisseur;
 	}
 	
 	// === From Object ===
 	
 	@Override
 	public String toString() {
-		return "Client n°"+num+" : ["+super.toString()+"]";
-	}
-
-	// === From IFournisseur ===
-	
-	@Override
-	public void livre() {
-		// TODO Auto-generated method stub
-		
+		String description = "Client n°"+num+" : ["+super.toString()+"]";
+		if(fournisseur) {
+			description +=" role suplementaire : fournisseur";
+		}
+		return description;
 	}
 
 	@Override
-	public void command() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	// === From IClient ===
-	
-	@Override
-	public void achete() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void paie() {
-		// TODO Auto-generated method stub
-		
+	public boolean isClient() {
+		return true;//un client est toujours client
 	}
 }

@@ -2,16 +2,18 @@ package projpoo01.gestion.personne;
 
 import java.text.DecimalFormat;
 
-public class Salarie extends Personne implements IClient, IFournisseur, IPatron {
+public class Salarie extends Personne implements IClient, IFournisseur {
 
 	private String insee;
 	private double salaire;
 	
-	public Salarie(String firstName, String lastName, String adresse,
-			String vill, String codePostal, String insee, double salaire) {
+	public Salarie(String firstName, String lastName, String adresse, String vill, 
+			String codePostal, String insee, double salaire, boolean client, boolean fournisseur) {
 		super(firstName, lastName, adresse, vill, codePostal);
 		this.insee = insee;
 		this.salaire = salaire;
+		this.client=client;
+		this.fournisseur=fournisseur;
 	}
 	
 	public String getSalaire() { //et formate    
@@ -22,49 +24,14 @@ public class Salarie extends Personne implements IClient, IFournisseur, IPatron 
 	
 	@Override
 	public String toString() {
-		return "Salarié [ N°Secu : "+insee+", "+super.toString()+", salaire : "+getSalaire()+ "]";
-	}
-
-	// === From IPatron ===
-	
-	@Override
-	public void embauche() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void licencie() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	// === From IFournisseur ===
-	
-	@Override
-	public void livre() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void command() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	// === From IClient ===
-	
-	@Override
-	public void achete() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void paie() {
-		// TODO Auto-generated method stub
-		
+		String description = "Salarié [ N°Secu : "+insee+", "+super.toString()+", salaire : "+getSalaire()+ "]";
+		if(client) {
+			description +=" role suplementaire : client";	
+		}
+		if(fournisseur) {
+			description += (client?", ":" role suplementaire : ")+"fournisseur";
+		}
+		return description;
 	}
 
 }

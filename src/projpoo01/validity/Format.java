@@ -1,6 +1,9 @@
 package projpoo01.validity;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Set;
 
 public class Format {
@@ -45,5 +48,14 @@ public class Format {
 		if(keySet.contains(key) ) {
 			throw new FormatException("Le "+nomage+" existe déjà associé à une autre personne ou entité");
 		}
+	}
+
+	public static boolean checkBoolean(String txt) throws FormatException {
+		List<String> literalT = new ArrayList<String>(Arrays.asList("Y","y","O","o"));
+		List<String> literalF = new ArrayList<String>(Arrays.asList("N","n"));
+		if(literalF.contains(txt) || literalT.contains(txt)) {
+			return literalT.contains(txt);
+		}
+		throw new FormatException("Booleen non reconnu");
 	}
 }
