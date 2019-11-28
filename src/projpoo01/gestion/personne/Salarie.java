@@ -26,10 +26,10 @@ public class Salarie extends Personne implements IClient, IFournisseur {
 	public String toString() {
 		String description = "Salarié [ N°Secu : "+insee+", "+super.toString()+", salaire : "+getSalaire()+ "]";
 		if(client) {
-			description +=" role suplementaire : client";	
+			description +="\n\t\trole suplementaire : client";	
 		}
 		if(fournisseur) {
-			description += (client?", ":" role suplementaire : ")+"fournisseur";
+			description += (client?", ":"\n\t\trole suplementaire : ")+"fournisseur";
 		}
 		return description;
 	}

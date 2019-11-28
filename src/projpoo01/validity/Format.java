@@ -51,8 +51,8 @@ public class Format {
 	}
 
 	public static boolean checkBoolean(String txt) throws FormatException {
-		List<String> literalT = new ArrayList<String>(Arrays.asList("Y","y","O","o"));
-		List<String> literalF = new ArrayList<String>(Arrays.asList("N","n"));
+		List<String> literalT = new ArrayList<String>(Arrays.asList("Y","y","O","o","1"));
+		List<String> literalF = new ArrayList<String>(Arrays.asList("N","n","0"));
 		if(literalF.contains(txt) || literalT.contains(txt)) {
 			return literalT.contains(txt);
 		}

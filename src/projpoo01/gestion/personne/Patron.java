@@ -13,7 +13,7 @@ public class Patron extends Salarie implements IPatron {
 	
 	@Override
 	public String toString() {
-		return super.toString()+( (client||fournisseur)?", ":" role suplementaire : " )+"patron";
+		return super.toString()+( (client||fournisseur)?", ":"\n\t\trole suplementaire : " )+"patron";
 	}
 
 	// === From IPatron ===

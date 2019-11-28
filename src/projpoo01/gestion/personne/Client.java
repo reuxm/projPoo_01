@@ -17,7 +17,7 @@ public class Client extends Personne implements IClient, IFournisseur {
 	public String toString() {
 		String description = "Client n°"+num+" : ["+super.toString()+"]";
 		if(fournisseur) {
-			description +=" role suplementaire : fournisseur";
+			description +="\n\t\trole suplementaire : fournisseur";
 		}
 		return description;
 	}
