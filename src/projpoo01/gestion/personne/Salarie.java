@@ -22,7 +22,7 @@ public class Salarie extends Personne implements IClient, IFournisseur, IPatron 
 	
 	@Override
 	public String toString() {
-		return "Salarié ["+super.toString()+"N°Secu : "+insee+", salaire : "+getSalaire()+ "]";
+		return "Salarié [ N°Secu : "+insee+", "+super.toString()+", salaire : "+getSalaire()+ "]";
 	}
 
 	// === From IPatron ===
