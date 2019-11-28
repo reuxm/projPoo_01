@@ -1,8 +1,10 @@
 package projpoo01.gestion.personne;
 
+import java.util.List;
+
 public interface IFournisseur {
 
-	public void livre();
-	public void command();
+	public boolean livre();
+	public void command(List<Commande> commandes);
 	
 }

@@ -1,8 +1,9 @@
 package projpoo01.gestion.personne;
 
 import java.text.DecimalFormat;
+import java.util.List;
 
-public class Salarie extends Personne implements IClient, IFournisseur, IPatron {
+public class Salarie extends Personne implements IClient, IFournisseur {
 
 	private String insee;
 	private double salaire;
@@ -25,30 +26,17 @@ public class Salarie extends Personne implements IClient, IFournisseur, IPatron 
 		return "Salarié ["+super.toString()+"N°Secu : "+insee+", salaire : "+getSalaire()+ "]";
 	}
 
-	// === From IPatron ===
-	
-	@Override
-	public void embauche() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void licencie() {
-		// TODO Auto-generated method stub
-		
-	}
-
 	// === From IFournisseur ===
 	
 	@Override
-	public void livre() {
+	public boolean livre() {
+		return false;
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void command() {
+	public void command(List<Commande> commandes) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -56,15 +44,15 @@ public class Salarie extends Personne implements IClient, IFournisseur, IPatron 
 	// === From IClient ===
 	
 	@Override
-	public void achete() {
+	public void achete(List<Achat> achats) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void paie() {
+	public boolean paie() {
 		// TODO Auto-generated method stub
-		
+		return false;
 	}
 
 }

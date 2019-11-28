@@ -1,5 +1,7 @@
 package projpoo01.gestion.personne;
 
+import java.util.List;
+
 public class Client extends Personne implements IClient, IFournisseur {
 
 	private String num;
@@ -20,13 +22,14 @@ public class Client extends Personne implements IClient, IFournisseur {
 	// === From IFournisseur ===
 	
 	@Override
-	public void livre() {
+	public boolean livre() {
+		return false;
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void command() {
+	public void command(List<Commande> commandes) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -34,14 +37,14 @@ public class Client extends Personne implements IClient, IFournisseur {
 	// === From IClient ===
 	
 	@Override
-	public void achete() {
+	public void achete(List<Achat> achats) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void paie() {
+	public boolean paie() {
 		// TODO Auto-generated method stub
-		
+		return false;
 	}
 }
