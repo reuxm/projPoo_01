@@ -1,22 +1,30 @@
 model Exemple
 
+class Achat
+end
+
+class Commande
+end
+
 class IPatron
 operations
 	embauche()
-	paie()
+	remunere()
 	liscencie()
 end
 
 class IClient
 operations
-	achete()
-	paie()
+	achete(achats:Set(Achat))
+	paie():Boolean
+	isClient():Boolean
 end
 
 class IFournisseur
 operations
-	livre()
-	paie()
+	commande(commande:Set(Commande))
+	livre():Boolean
+	isFournisseur():Boolean
 end
 
 class Personne
@@ -38,10 +46,13 @@ attributes
 	NumFour : String
 end
 
-class Salarie < Personne, IClient, IFournisseur, IPatron
+class Salarie < Personne, IClient, IFournisseur
 attributes
 	Insee : String
 	Salaire : Real
+end
+
+class Patron < Salarie, IPatron
 end
 
 class Reseau
