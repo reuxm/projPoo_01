@@ -20,6 +20,14 @@ public class Salarie extends Personne implements IClient, IFournisseur {
 		return (new DecimalFormat("###,###,###.00").format(salaire))+" €";
 	}
 	
+	public double getSalaireValue() {
+		return this.salaire;
+	}
+	
+	public String getInsee() {
+		return this.insee;
+	}
+	
 	// === From Object ===
 	
 	@Override

@@ -3,11 +3,8 @@ package projpoo01.commandline;
 import java.util.Scanner;
 
 import projpoo01.Reseau;
-import projpoo01.gestion.personne.Client;
-import projpoo01.gestion.personne.Fournisseur;
-import projpoo01.gestion.personne.Salarie;
-import projpoo01.validity.Format;
-import projpoo01.validity.FormatException;
+import projpoo01.gestion.personne.*;
+import projpoo01.validity.*;
 
 public class Saisie {
 
@@ -18,7 +15,11 @@ public class Saisie {
 		this.reseau = r;
 	}
 
-	public void saisieC(int groupSize, Scanner sc) {
+	public static Scanner getScanner() {
+		return scanner;
+	}
+	
+	public void saisieClients(int groupSize, Scanner sc) {
 		for(int i=1;i<=groupSize;i++) {
 			String numClient;
 			boolean validID;
@@ -34,12 +35,12 @@ public class Saisie {
 				}
 			} while(!validID);
 			
-			String[] newP = saisieP(sc);
+			String[] newP = saisiePersonne(sc);
 
 			boolean f = false;
 			boolean validB;
 			do{
-				System.out.println("Ce client est-il aussi un fournisseur ? [Y:N]");
+				System.out.println("Ce client est-il aussi un fournisseur ? [Y/N]");
 				String fournisseur = sc.nextLine();
 				validB = true;
 				try{
@@ -57,7 +58,7 @@ public class Saisie {
 		}
 	}
 
-	public void saisieF(int groupSize, Scanner sc) {
+	public void saisieFournisseurs(int groupSize, Scanner sc) {
 		for(int i=1;i<=groupSize;i++) {
 			String numFour;
 			boolean validID;
@@ -73,12 +74,12 @@ public class Saisie {
 				}
 			} while(!validID);
 			
-			String[] newP = saisieP(sc);
+			String[] newP = saisiePersonne(sc);
 
 			boolean c = false;
 			boolean validB;
 			do {
-				System.out.println("Ce fournissseur est-il aussi un client ? [Y:N]");
+				System.out.println("Ce fournissseur est-il aussi un client ? [Y/N]");
 				String client = sc.nextLine();
 				try {
 					c = Format.checkBoolean(client);
@@ -97,74 +98,86 @@ public class Saisie {
 		}
 	}
 
-	public void saisieS(int groupSize, Scanner sc) {
+	public Patron saisiePatron(Scanner sc) {
+		Salarie s = saisieSalarie(sc, "Patron");
+		Patron patron = new Patron(
+			s.getFirstName(), s.getLastName(), s.getAdresse(), s.getVill(), s.getCodePostal(),
+			s.getInsee(), s.getSalaireValue(), s.isClient(), s.isFournisseur()
+		);
+		reseau.getSalaries().put(s.getInsee(), patron);
+		return patron;
+	}
+
+	private Salarie saisieSalarie(Scanner sc, String namePrompt) {
+		String insee;
+		boolean validInsee;
+		do {
+			System.out.print(namePrompt+" :\nN° de securité sociale ? ");
+			insee=sc.nextLine();
+			try{
+				Format.checkInsee(insee) ;//Contrainte : 13 chiffres 
+				Format.checkPK(insee, reseau.getSalaries().keySet(), "numero de securite sociale");//Contrainte : unicité
+				validInsee = true;
+			} catch(FormatException e) {//deux gestions dans le meme catch : on veut resaisir la donnée dans les deux cas
+				System.out.println(e.getMessage());
+				validInsee = false;;
+			}
+		}while (!validInsee);
+		 
+		double salaireFormaté = 0;
+		boolean validSalaire;
+		do {
+			System.out.print("Salaire (precision max 0,01€)? ");
+			String salaire=sc.nextLine();
+			try {
+				salaireFormaté= Format.checkSalaire(salaire);
+				validSalaire = true;
+			} catch (FormatException e) {
+				System.out.println(e.getMessage());
+				validSalaire = false;
+			}
+		} while(!validSalaire);
+		String[] newP = saisiePersonne(sc);
+		
+		boolean c = false;
+		boolean validBC;
+		do {
+			System.out.println("Ce fournissseur est-il aussi un client ? [Y/N]");
+			String client = sc.nextLine();
+			try {
+				c = Format.checkBoolean(client);
+				validBC = true;
+			} catch (FormatException e) {
+				System.out.println(e.getMessage());
+				validBC = false;
+			}
+		} while(!validBC);
+		
+		boolean f = false;
+		boolean validBF;
+		do{
+			System.out.println("Ce salarie est-il aussi un fournisseur ? [Y/N]");
+			String fournisseur = sc.nextLine();
+			validBF = true;
+			try{
+				f = Format.checkBoolean(fournisseur);
+			} catch(FormatException e) {
+				System.out.println(e.getMessage());
+				validBF = false;
+			}
+		} while(!validBF);
+		
+		return new Salarie(newP[0], newP[1], newP[2], newP[3], newP[4], insee, salaireFormaté, c, f);
+	}
+
+	public void saisieSalaries(int groupSize, Scanner sc) {
 		for(int i=1;i<=groupSize;i++) {
-			String insee;
-			boolean validInsee;
-			do {
-				System.out.print("Salarié "+i+" :\nN° de securité sociale ? ");
-				insee=sc.nextLine();
-				try{
-					Format.checkInsee(insee) ;//Contrainte : 13 chiffres 
-					Format.checkPK(insee, reseau.getSalaries().keySet(), "numero de securite sociale");//Contrainte : unicité
-					validInsee = true;
-				} catch(FormatException e) {//deux gestions dans le meme catch : on veut resaisir la donnée dans les deux cas
-					System.out.println(e.getMessage());
-					validInsee = false;;
-				}
-			}while (!validInsee);
-			 
-			double salaireFormaté = 0;
-			boolean validSalaire;
-			do {
-				System.out.print("Salaire (precision max 0,01€)? ");
-				String salaire=sc.nextLine();
-				try {
-					salaireFormaté= Format.checkSalaire(salaire);
-					validSalaire = true;
-				} catch (FormatException e) {
-					System.out.println(e.getMessage());
-					validSalaire = false;
-				}
-			} while(!validSalaire);
-			String[] newP = saisieP(sc);
-			
-			boolean c = false;
-			boolean validBC;
-			do {
-				System.out.println("Ce fournissseur est-il aussi un client ? [Y:N]");
-				String client = sc.nextLine();
-				try {
-					c = Format.checkBoolean(client);
-					validBC = true;
-				} catch (FormatException e) {
-					System.out.println(e.getMessage());
-					validBC = false;
-				}
-			} while(!validBC);
-			
-			boolean f = false;
-			boolean validBF;
-			do{
-				System.out.println("Ce salarie est-il aussi un fournisseur ? [Y:N]");
-				String fournisseur = sc.nextLine();
-				validBF = true;
-				try{
-					f = Format.checkBoolean(fournisseur);
-				} catch(FormatException e) {
-					System.out.println(e.getMessage());
-					validBF = false;
-				}
-			} while(!validBF);
-			
-			reseau.getSalaries().put(
-				insee,
-				new Salarie(newP[0], newP[1], newP[2], newP[3], newP[4], insee, salaireFormaté, c, f)
-			);	
+			Salarie s = saisieSalarie(sc, "Salarié "+i);
+			reseau.getSalaries().put( s.getInsee(), s );	
 		}
 	}
 	
-	private String[] saisieP(Scanner sc) {
+	private String[] saisiePersonne(Scanner sc) {
 		System.out.print("Nom ? ");
 		String n = sc.nextLine();
 		
@@ -193,10 +206,6 @@ public class Saisie {
 		
 		String[] data = {p, n, a, v, cp};
 		return  data;
-	}
-
-	public static Scanner getScanner() {
-		return scanner;
 	}
 	
 }
