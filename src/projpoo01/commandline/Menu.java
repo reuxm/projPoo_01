@@ -1,8 +1,10 @@
 package projpoo01.commandline;
 
+import java.util.Map;
 import java.util.Scanner;
 
 import projpoo01.Reseau;
+import projpoo01.gestion.personne.Personne;
 import projpoo01.validity.Format;
 import projpoo01.validity.FormatException;
 
@@ -46,7 +48,8 @@ public class Menu {
 				case 2 ://afficher les listes
 					System.out.println( reseau );
 					break;
-				case 3 ://actions client
+				case 3 :
+					actionClients();
 					break;
 				case 4 ://action fournisseurs
 					break;
@@ -105,12 +108,21 @@ public class Menu {
 				case 2 :
 					reseau.readPatron();
 					break;
-				case 3 :
+				case 3 ://exit
 					break;
 				default :
 					validChoice = false;
 			}	
 		}while(!validChoice);
+	}
+	
+	private void actionClients() {
+		Map<Integer, Personne> clients = reseau.listClients();
+		//choix acheteur
+		//faire achat
+		//passer commande
+		//pâyer
+		//annuler
 	}
 	
 }

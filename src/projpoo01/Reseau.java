@@ -1,9 +1,11 @@
 package projpoo01;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Scanner;
+import java.util.function.Function;
 
 import projpoo01.commandline.*;
 import projpoo01.gestion.personne.*;
@@ -103,6 +105,32 @@ public class Reseau {
 		Salarie newPatron = new Saisie(this).choosePatron();
 		patron = new Patron( newPatron );
 		salaries.put(patron.getInsee(), patron);
+	}
+	
+	public Map<Integer, Personne> listClients() {
+		Collection<Personne> colaborateurs = new ArrayList<Personne>();
+		colaborateurs.addAll( salaries.values() );
+		colaborateurs.addAll( clients.values() );
+		colaborateurs.addAll( fournisseurs.values() );
+		return new PersonneComposer<Personne>().numericLabel(colaborateurs, new Function<Personne, Boolean>() {
+			@Override
+			public Boolean apply(Personne arg0) {
+				return arg0.isClient();
+			}
+		});
+	}
+	
+	public Map<Integer, Personne> listFournisseurs() {
+		Collection<Personne> colaborateurs = new ArrayList<Personne>();
+		colaborateurs.addAll( salaries.values() );
+		colaborateurs.addAll( clients.values() );
+		colaborateurs.addAll( fournisseurs.values() );
+		return new PersonneComposer<Personne>().numericLabel(colaborateurs, new Function<Personne, Boolean>() {
+			@Override
+			public Boolean apply(Personne arg0) {
+				return arg0.isFournisseur();
+			}
+		});
 	}
 
 }
