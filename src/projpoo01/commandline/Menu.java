@@ -100,6 +100,7 @@ public class Menu {
 			}while(nan);	
 			switch(choice) {
 				case 1 :
+					reseau.choosePatron();
 					break;
 				case 2 :
 					reseau.readPatron();

@@ -1,9 +1,12 @@
 package projpoo01.commandline;
 
+import java.util.Map;
 import java.util.Scanner;
+import java.util.Map.Entry;
 
 import projpoo01.Reseau;
 import projpoo01.gestion.personne.*;
+import projpoo01.util.PersonneComposer;
 import projpoo01.validity.*;
 
 public class Saisie {
@@ -100,12 +103,36 @@ public class Saisie {
 
 	public Patron saisiePatron(Scanner sc) {
 		Salarie s = saisieSalarie(sc, "Patron");
-		Patron patron = new Patron(
-			s.getFirstName(), s.getLastName(), s.getAdresse(), s.getVill(), s.getCodePostal(),
-			s.getInsee(), s.getSalaireValue(), s.isClient(), s.isFournisseur()
-		);
+		Patron patron = new Patron( s );
 		reseau.getSalaries().put(s.getInsee(), patron);
 		return patron;
+	}
+	
+	public Salarie choosePatron() {
+		Map<Integer, Personne> personnes = new PersonneComposer<Salarie>().numericLabel(reseau.getSalaries().values());
+		Scanner sc = Saisie.getScanner();
+		
+		System.out.println("Liste des salariés : ");
+		for(Entry<Integer, Personne> entry : personnes.entrySet()) {
+			System.out.println(entry.getKey()+"\t"+entry.getValue());
+		}
+		boolean validChoice = true;
+		boolean nan;
+		int choice=-1;
+		do {
+			System.out.println("Votre choix ? ");
+			String input = sc.nextLine();
+			try {
+				choice = Integer.parseInt(input);
+				validChoice=(choice>0 && choice<=personnes.size());
+				nan = false;
+			} catch (NumberFormatException e) {
+				System.out.println("Veuillez entrer un nombre");
+				nan = true;
+			}
+		} while(nan || !validChoice);
+		
+		return (Salarie) personnes.get(choice);
 	}
 
 	private Salarie saisieSalarie(Scanner sc, String namePrompt) {

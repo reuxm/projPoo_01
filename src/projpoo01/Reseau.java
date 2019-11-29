@@ -2,10 +2,12 @@ package projpoo01;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Scanner;
 
 import projpoo01.commandline.*;
 import projpoo01.gestion.personne.*;
+import projpoo01.util.PersonneComposer;
 
 public class Reseau {
 
@@ -95,6 +97,12 @@ public class Reseau {
 
 	public void readPatron() {
 		patron = new Saisie(this).saisiePatron(Saisie.getScanner());
+	}
+
+	public void choosePatron() {
+		Salarie newPatron = new Saisie(this).choosePatron();
+		patron = new Patron( newPatron );
+		salaries.put(patron.getInsee(), patron);
 	}
 
 }

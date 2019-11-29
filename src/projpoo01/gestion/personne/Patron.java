@@ -8,6 +8,11 @@ public class Patron extends Salarie implements IPatron {
 		super(firstName, lastName, adresse, vill, codePostal, insee, salaire, client, fournisseur);
 	}
 	
+	public Patron(Salarie base) {
+		this(base.getFirstName(), base.getLastName(), base.getAdresse(), base.getVill(), base.getCodePostal(),
+				base.getInsee(), base.getSalaireValue(), base.isClient(), base.isFournisseur() );
+	}
+	
 	// === From Object ===
 	
 	@Override
