@@ -1,6 +1,6 @@
 package projpoo01.gestion.personne;
 
-public class Client extends Personne implements IClient, IFournisseur {
+public class Client extends Personne {
 
 	private String num;
 	
