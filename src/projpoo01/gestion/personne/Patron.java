@@ -6,7 +6,6 @@ public class Patron extends Salarie implements IPatron {
 			String codePostal, String insee,
 			double salaire, boolean client, boolean fournisseur) {
 		super(firstName, lastName, adresse, vill, codePostal, insee, salaire, client, fournisseur);
-		// TODO Auto-generated constructor stub
 	}
 	
 	// === From Object ===
