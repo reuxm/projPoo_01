@@ -21,18 +21,30 @@ public class Reseau {
 	
 	public static void main(String[] args) {
 		Reseau reseau = new Reseau();
-		reseau.saisie();
+		reseau.saisieInitiale();
 		System.out.println(reseau);
 	}
 	
-	public void saisie() {
+	public void saisieInitiale() {
 		Scanner sc = new Scanner(System.in);
 		
 		String[] categories= {"salarié","client","fournisseur"};
 		for( String categorie:categories) {
-			System.out.print("Combien de "+categorie+"(s) ? : ");
-			int groupSize = sc.nextInt();
-			sc.nextLine();//conssome le EOL laissé par le nextInt() precedent
+			int groupSize=0;
+			boolean validNumber;
+			do{
+				System.out.print("Combien de "+categorie+"(s) ? : ");
+				try{
+					groupSize = sc.nextInt();
+					validNumber = true;
+				} catch(java.util.InputMismatchException e) {
+					System.out.println("Entrez un nombre SVP");
+					validNumber = false;
+				} finally {
+					sc.nextLine();//conssome le EOL laissé par le nextInt() precedent
+				}
+			} while(!validNumber);
+			
 			switch(categorie) {
 				case "salarié":saisieS(groupSize, sc);break;
 				case "client":saisieC(groupSize, sc);break;
@@ -44,84 +56,151 @@ public class Reseau {
 
 	private void saisieC(int groupSize, Scanner sc) {
 		for(int i=1;i<=groupSize;i++) {
-			try{
+			String numClient;
+			boolean validID;
+			do{
 				System.out.print("Client "+i+" : \nN°Client ? ");
-				String numClient=sc.nextLine();
-				Format.checkPK(numClient, clients.keySet(), "numero Client");//Contrainte : unicité
-				
-				String[] newP = saisieP(sc);
-				
+				numClient=sc.nextLine();
+				try {//Contrainte : unicité
+					Format.checkPK(numClient, clients.keySet(), "numero Client");
+					validID = true;
+				} catch(FormatException e) {
+					System.out.println(e.getMessage());
+					validID = false;
+				}
+			} while(!validID);
+			
+			String[] newP = saisieP(sc);
+
+			boolean f = false;
+			boolean validB;
+			do{
 				System.out.println("Ce client est-il aussi un fournisseur ? [Y:N]");
 				String fournisseur = sc.nextLine();
-				boolean f = Format.checkBoolean(fournisseur);
-				clients.put(
-					numClient,
-					new Client(newP[0], newP[1], newP[2], newP[3], newP[4], numClient, f)
-				);
-			} catch (FormatException e) {
-				System.out.println(e.getMessage());
-				i--;//entrée non comptabilisée
-			}
+				validB = true;
+				try{
+					f = Format.checkBoolean(fournisseur);
+				} catch(FormatException e) {
+					System.out.println(e.getMessage());
+					validB = false;
+				}
+			} while(!validB);
+			
+			clients.put(
+				numClient,
+				new Client(newP[0], newP[1], newP[2], newP[3], newP[4], numClient, f)
+			);
 		}
 	}
 
 	private void saisieF(int groupSize, Scanner sc) {
 		for(int i=1;i<=groupSize;i++) {
-			try{
+			String numFour;
+			boolean validID;
+			do {
 				System.out.print("Fournisseur "+i+" :\nN°Fournisseur ? ");
-				String numFour=sc.nextLine();
-				Format.checkPK(numFour, fournisseurs.keySet(), "numero Fournissuer");//Contrainte : unicité
-				
-				String[] newP = saisieP(sc);
-				
+				numFour=sc.nextLine();
+				try {//Contrainte : unicité
+					Format.checkPK(numFour, fournisseurs.keySet(), "numero Fournissuer");
+					validID = true;
+				} catch (FormatException e) {
+					System.out.println(e.getMessage());
+					validID = false;
+				}
+			} while(!validID);
+			
+			String[] newP = saisieP(sc);
+
+			boolean c = false;
+			boolean validB;
+			do {
 				System.out.println("Ce fournissseur est-il aussi un client ? [Y:N]");
 				String client = sc.nextLine();
-				boolean c = Format.checkBoolean(client);
+				try {
+					c = Format.checkBoolean(client);
+					validB = true;
+				} catch (FormatException e) {
+					System.out.println(e.getMessage());
+					validB = false;
+				}
+			} while(!validB);
+				
 				fournisseurs.put(
 					numFour,
 					new Fournisseur(newP[0], newP[1], newP[2], newP[3], newP[4], numFour, c)
 				);
-			} catch (FormatException e) {
-				System.out.println(e.getMessage());
-				i--;//entrée non comptabilisée
-			}
+			
 		}
 	}
 
 	private void saisieS(int groupSize, Scanner sc) {
 		for(int i=1;i<=groupSize;i++) {
-			try{
+			String insee;
+			boolean validInsee;
+			do {
 				System.out.print("Salarié "+i+" :\nN° de securité sociale ? ");
-				String insee=sc.nextLine();
-				Format.checkInsee(insee) ;//Contrainte : 13 chiffres 
-				Format.checkPK(insee, salaries.keySet(), "numero de securite sociale");//Contrainte : unicité
-				
+				insee=sc.nextLine();
+				try{
+					Format.checkInsee(insee) ;//Contrainte : 13 chiffres 
+					Format.checkPK(insee, salaries.keySet(), "numero de securite sociale");//Contrainte : unicité
+					validInsee = true;
+				} catch(FormatException e) {//deux gestions dans le meme catch : on veut resaisir la donnée dans les deux cas
+					System.out.println(e.getMessage());
+					validInsee = false;;
+				}
+			}while (!validInsee);
+			 
+			double salaireFormaté = 0;
+			boolean validSalaire;
+			do {
 				System.out.print("Salaire (precision max 0,01€)? ");
 				String salaire=sc.nextLine();
-				double salaireFormaté= Format.checkSalaire(salaire);
-				
-				String[] newP = saisieP(sc);
-				
+				try {
+					salaireFormaté= Format.checkSalaire(salaire);
+					validSalaire = true;
+				} catch (FormatException e) {
+					System.out.println(e.getMessage());
+					validSalaire = false;
+				}
+			} while(!validSalaire);
+			String[] newP = saisieP(sc);
+			
+			boolean c = false;
+			boolean validBC;
+			do {
 				System.out.println("Ce fournissseur est-il aussi un client ? [Y:N]");
 				String client = sc.nextLine();
-				boolean c = Format.checkBoolean(client);
-				
-				System.out.println("Ce client est-il aussi un fournisseur ? [Y:N]");
+				try {
+					c = Format.checkBoolean(client);
+					validBC = true;
+				} catch (FormatException e) {
+					System.out.println(e.getMessage());
+					validBC = false;
+				}
+			} while(!validBC);
+			
+			boolean f = false;
+			boolean validBF;
+			do{
+				System.out.println("Ce salarie est-il aussi un fournisseur ? [Y:N]");
 				String fournisseur = sc.nextLine();
-				boolean f = Format.checkBoolean(fournisseur);
-				
-				salaries.put(
-					insee,
-					new Salarie(newP[0], newP[1], newP[2], newP[3], newP[4], insee, salaireFormaté, c, f)
-				);
-			} catch(FormatException e) {
-				System.out.println(e.getMessage());
-				i--;//entrée non comptabilisée
-			} 
+				validBF = true;
+				try{
+					f = Format.checkBoolean(fournisseur);
+				} catch(FormatException e) {
+					System.out.println(e.getMessage());
+					validBF = false;
+				}
+			} while(!validBF);
+			
+			salaries.put(
+				insee,
+				new Salarie(newP[0], newP[1], newP[2], newP[3], newP[4], insee, salaireFormaté, c, f)
+			);	
 		}
 	}
 	
-	private String[] saisieP(Scanner sc) throws FormatException {
+	private String[] saisieP(Scanner sc) {
 		System.out.print("Nom ? ");
 		String n = sc.nextLine();
 		
@@ -130,10 +209,20 @@ public class Reseau {
 		
 		System.out.print("Adresse ? ");
 		String a = sc.nextLine();
-		
-		System.out.print("Code Postal ? ");
-		String cp = sc.nextLine();
-		Format.checkCP(cp);//Contrainte : 5 chiffres
+
+		boolean validCP;
+		String cp;
+		do{
+			System.out.print("Code Postal ? ");
+			cp = sc.nextLine();
+			try {
+				Format.checkCP(cp);//Contrainte : 5 chiffres
+				validCP = true;
+			} catch(FormatException e) {
+				System.out.println(e.getMessage());
+				validCP = false;
+			}
+		} while(!validCP);
 		
 		System.out.print("Ville ? ");
 		String v = sc.nextLine();
