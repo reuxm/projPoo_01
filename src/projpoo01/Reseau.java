@@ -34,7 +34,7 @@ public class Reseau {
 		Saisie saisie = new Saisie(this);
 		Scanner sc = Saisie.getScanner();
 		
-		String[] categories= {"salarié","client","fournisseur"};
+		String[] categories= {"salarie","client","fournisseur"};
 		for( String categorie:categories) {
 			int groupSize=0;
 			boolean validNumber;
@@ -52,7 +52,7 @@ public class Reseau {
 			} while(!validNumber);
 			
 			switch(categorie) {
-				case "salarié":saisie.saisieSalaries(groupSize, sc);break;
+				case "salarie":saisie.saisieSalaries(groupSize, sc);break;
 				case "client":saisie.saisieClients(groupSize, sc);break;
 				default:saisie.saisieFournisseurs(groupSize ,sc);//default vaut toujours fournisseur, voir String[] categories
 			}
@@ -63,7 +63,7 @@ public class Reseau {
 	public String toString() {
 		String print = "\n### Contacts du réseau :\n"		
 		//salariés
-			+ "Nombre de salariés : "+salaries.size();
+			+ "Nombre de salaries : "+salaries.size();
 		for(Salarie s : salaries.values()) {
 			print += "\n\t"+s.toString();
 		}

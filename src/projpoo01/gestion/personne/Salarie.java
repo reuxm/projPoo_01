@@ -32,7 +32,7 @@ public class Salarie extends Personne implements IClient, IFournisseur {
 	
 	@Override
 	public String toString() {
-		String description = "Salarié [ N°Secu : "+insee+", "+super.toString()+", salaire : "+getSalaire()+ "]";
+		String description = "Salarie [ N°Secu : "+insee+", "+super.toString()+", salaire : "+getSalaire()+ "]";
 		if(client) {
 			description +="\n\t\trole suplementaire : client";	
 		}

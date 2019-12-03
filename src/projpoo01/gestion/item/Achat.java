@@ -5,6 +5,6 @@ import java.util.Date;
 public class Achat {
 	
 	private Date date;
-	private String intitulé;
-	private int quantité;
+	private String intitule;
+	private int quantite;
 }

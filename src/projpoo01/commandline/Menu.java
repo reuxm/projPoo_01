@@ -62,7 +62,7 @@ public class Menu {
 	private void patron(Scanner sc) {
 		System.out.println("1> Nommer un patron");
 		if(reseau.getPatron()!=null) {
-			System.out.println("ATTENTION : Un patron existe déjà. Voulez vous le remplacer ? [Y/N]");
+			System.out.println("ATTENTION : Un patron existe deja. Voulez vous le remplacer ? [Y/N]");
 			boolean confirme = true;
 			boolean validB;
 			do {
@@ -82,9 +82,9 @@ public class Menu {
 		
 		boolean validChoice = true;
 		do {
-			System.out.println("\t1.1> Promouvoir un salarie\n"
-				+ "\t1.2> Créer une nouvelle personne\n"
-				+ "\t1.3> Annuler"
+			System.out.println("\t1> Promouvoir un salarie\n"
+				+ "\t2> Creer une nouvelle personne\n"
+				+ "\t3> Annuler"
 			);
 			
 			int choice = -1;

@@ -30,23 +30,23 @@ public class Format {
 		}
 		b |= insee.length()!=13;
 		if(b) {
-			throw new FormatException("Numero de securité sociale invalide, 13 chiffres requis!");
+			throw new FormatException("Numero de securite sociale invalide, 13 chiffres requis!");
 		}
 	}
 	
 	public static double checkSalaire(String salaire) throws FormatException {
 		try{
-			double salaireFormaté = Double.parseDouble(salaire.replace(',', '.'));
-			new DecimalFormat("###,###,###.00").format(salaireFormaté);
-			return salaireFormaté;
+			double salaireFormate = Double.parseDouble(salaire.replace(',', '.'));
+			new DecimalFormat("###,###,###.00").format(salaireFormate);
+			return salaireFormate;
 		} catch (NumberFormatException e) {
-			throw new FormatException("Format de salaire non supporté : XXXXXX.XX uniquement");
+			throw new FormatException("Format de salaire non supporte : XXXXXX.XX uniquement");
 		}
 	}
 
 	public static void checkPK(String key, Set<String> keySet, String nomage) throws FormatException {
 		if(keySet.contains(key) ) {
-			throw new FormatException("Le "+nomage+" existe déjà associé à une autre personne ou entité");
+			throw new FormatException("Le "+nomage+" existe deja associe a une autre personne ou entite");
 		}
 	}
 
