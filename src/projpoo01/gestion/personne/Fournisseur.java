@@ -1,9 +1,20 @@
 package projpoo01.gestion.personne;
 
-public class Fournisseur extends Personne {
+import java.util.List;
 
+import projpoo01.gestion.item.Achat;
+import projpoo01.gestion.item.Commande;
+
+public class Fournisseur extends Personne implements IClient, IFournisseur {
+
+	/**
+	 * Generated serial version ID
+	 */
+	private static final long serialVersionUID = -960494257256975181L;
+	
 	private String num;
-
+	protected boolean client;
+	
 	public Fournisseur(String firstName, String lastName, String adresse, String vill, 
 			String codePostal, String numFour, boolean client) {
 		super(firstName, lastName, adresse, vill, codePostal);
@@ -27,6 +38,35 @@ public class Fournisseur extends Personne {
 	@Override
 	public boolean isFournisseur() {
 		return true;//un fournisseur est toujours un fournisseur
+	}
+
+	@Override
+	public boolean livre() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void command(List<Commande> commandes) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void achete(List<Achat> achats) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public boolean paie() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean isClient() {
+		return client;
 	}
 	
 }
