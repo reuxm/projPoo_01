@@ -32,11 +32,27 @@ public class Client extends Personne implements IClient, IFournisseur {
 		}
 		return description;
 	}
+	
+	// === From IClient
 
 	@Override
 	public boolean isClient() {
 		return true;//un client est toujours client
 	}
+
+	@Override
+	public void achete(List<Achat> achats) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public boolean paie() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	
+	// === IFournisseur ===
 
 	@Override
 	public boolean livre() {
@@ -53,17 +69,5 @@ public class Client extends Personne implements IClient, IFournisseur {
 	@Override
 	public boolean isFournisseur() {
 		return fournisseur;
-	}
-
-	@Override
-	public void achete(List<Achat> achats) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public boolean paie() {
-		// TODO Auto-generated method stub
-		return false;
 	}
 }

@@ -4,16 +4,18 @@ import java.util.Map;
 import java.util.Scanner;
 
 import projpoo01.Reseau;
-import projpoo01.gestion.personne.Personne;
+import projpoo01.gestion.personne.*;
 import projpoo01.validity.Format;
 import projpoo01.validity.FormatException;
 
 public class Menu {
 
 	private Reseau reseau;
+	private Saisie saisie;
 	
-	public Menu(Reseau r) {
+	public Menu(Reseau r, Saisie s) {
 		this.reseau = r;
+		this.saisie = s;
 	}
 	
 	public void menu(){
@@ -82,15 +84,15 @@ public class Menu {
 		
 		boolean validChoice = true;
 		do {
-			System.out.println("\t1> Promouvoir un salarie\n"
-				+ "\t2> Creer une nouvelle personne\n"
+			System.out.println("\t> Creer un patron\n"
+				+ "\t2> Promouvoir une salarie\n"
 				+ "\t3> Annuler"
 			);
 			
 			int choice = -1;
 			boolean nan;
 			do {
-				System.out.print("\t Votre choix ? ");
+				System.out.print("\tVotre choix ? ");
 				String choiceLiteral = sc.nextLine();
 				try {
 					choice = Integer.parseInt(choiceLiteral);
@@ -100,13 +102,17 @@ public class Menu {
 					nan = true;
 				}
 	
-			}while(nan);	
+			}while(nan);
+			
+			Salarie s;
 			switch(choice) {
 				case 1 :
-					reseau.choosePatron();
+					s = saisie.saisiePatron( sc );
+					reseau.setPatron( s );
 					break;
 				case 2 :
-					reseau.readPatron();
+					s = saisie.choosePatron();
+					reseau.setPatron( s );
 					break;
 				case 3 ://exit
 					break;

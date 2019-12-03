@@ -21,6 +21,35 @@ public class Saisie {
 	public static Scanner getScanner() {
 		return scanner;
 	}
+
+	
+	public void saisieInitiale() {
+		Scanner sc = Saisie.getScanner();
+		
+		String[] categories= {"salarie","client","fournisseur"};
+		for( String categorie:categories) {
+			int groupSize=0;
+			boolean validNumber;
+			do{
+				System.out.print("Combien de "+categorie+"(s) ? : ");
+				try{
+					groupSize = sc.nextInt();
+					validNumber = true;
+				} catch(java.util.InputMismatchException e) {
+					System.out.println("Entrez un nombre SVP");
+					validNumber = false;
+				} finally {
+					sc.nextLine();//conssome le EOL laissé par le nextInt() precedent
+				}
+			} while(!validNumber);
+			
+			switch(categorie) {
+				case "salarie":this.saisieSalaries(groupSize, sc);break;
+				case "client":this.saisieClients(groupSize, sc);break;
+				default:this.saisieFournisseurs(groupSize ,sc);//default vaut toujours fournisseur, voir String[] categories
+			}
+		}
+	}
 	
 	public void saisieClients(int groupSize, Scanner sc) {
 		for(int i=1;i<=groupSize;i++) {
@@ -101,11 +130,11 @@ public class Saisie {
 		}
 	}
 
-	public Patron saisiePatron(Scanner sc) {
+	public Salarie saisiePatron(Scanner sc) {
 		Salarie s = saisieSalarie(sc, "Patron");
-		Patron patron = new Patron( s );
-		reseau.getSalaries().put(s.getInsee(), patron);
-		return patron;
+		//pas d'info suplémentaires à saisir - pour l'instant
+		
+		return s;
 	}
 	
 	public Salarie choosePatron() {
@@ -180,21 +209,7 @@ public class Saisie {
 			}
 		} while(!validBC);
 		
-		boolean f = false;
-		boolean validBF;
-		do{
-			System.out.println("Ce salarie est-il aussi un fournisseur ? [Y/N]");
-			String fournisseur = sc.nextLine();
-			validBF = true;
-			try{
-				f = Format.checkBoolean(fournisseur);
-			} catch(FormatException e) {
-				System.out.println(e.getMessage());
-				validBF = false;
-			}
-		} while(!validBF);
-		
-		return new Salarie(newP[0], newP[1], newP[2], newP[3], newP[4], insee, salaireFormate, c, f);
+		return new Salarie(newP[0], newP[1], newP[2], newP[3], newP[4], insee, salaireFormate, c);
 	}
 
 	public void saisieSalaries(int groupSize, Scanner sc) {

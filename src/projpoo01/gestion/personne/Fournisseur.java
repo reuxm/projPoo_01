@@ -52,6 +52,8 @@ public class Fournisseur extends Personne implements IClient, IFournisseur {
 		
 	}
 
+	// === From IClient ===
+	
 	@Override
 	public void achete(List<Achat> achats) {
 		// TODO Auto-generated method stub

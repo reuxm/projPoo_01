@@ -1,5 +1,6 @@
 package projpoo01;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -11,8 +12,13 @@ import projpoo01.commandline.*;
 import projpoo01.gestion.personne.*;
 import projpoo01.util.PersonneComposer;
 
-public class Reseau {
+public class Reseau implements Serializable {
 
+	/**
+	 * Generated serial version ID
+	 */
+	private static final long serialVersionUID = -454784963153042344L;
+	
 	private Map<String, Client> clients;
 	private Map<String, Fournisseur> fournisseurs;
 	private Map<String, Salarie> salaries;
@@ -26,37 +32,9 @@ public class Reseau {
 	
 	public static void main(String[] args) {
 		Reseau reseau = new Reseau();
-		reseau.saisieInitiale();
-		new Menu(reseau).menu();
-	}
-	
-	public void saisieInitiale() {
-		Saisie saisie = new Saisie(this);
-		Scanner sc = Saisie.getScanner();
-		
-		String[] categories= {"salarie","client","fournisseur"};
-		for( String categorie:categories) {
-			int groupSize=0;
-			boolean validNumber;
-			do{
-				System.out.print("Combien de "+categorie+"(s) ? : ");
-				try{
-					groupSize = sc.nextInt();
-					validNumber = true;
-				} catch(java.util.InputMismatchException e) {
-					System.out.println("Entrez un nombre SVP");
-					validNumber = false;
-				} finally {
-					sc.nextLine();//conssome le EOL laissé par le nextInt() precedent
-				}
-			} while(!validNumber);
-			
-			switch(categorie) {
-				case "salarie":saisie.saisieSalaries(groupSize, sc);break;
-				case "client":saisie.saisieClients(groupSize, sc);break;
-				default:saisie.saisieFournisseurs(groupSize ,sc);//default vaut toujours fournisseur, voir String[] categories
-			}
-		}
+		Saisie saisie = new Saisie(reseau);
+		saisie.saisieInitiale();
+		new Menu(reseau, saisie).menu();
 	}
 	
 	@Override
@@ -97,13 +75,15 @@ public class Reseau {
 		return patron;
 	}
 
-	public void readPatron() {
-		patron = new Saisie(this).saisiePatron(Saisie.getScanner());
-	}
-
-	public void choosePatron() {
-		Salarie newPatron = new Saisie(this).choosePatron();
-		patron = new Patron( newPatron );
+	public void setPatron(Salarie p) {
+		if( patron != null) {//destitution
+			String oldPatronKey = patron.getInsee();
+			salaries.put(
+					oldPatronKey,
+				new Salarie( salaries.get(oldPatronKey) )
+			);
+		}
+		patron = new Patron( p );
 		salaries.put(patron.getInsee(), patron);
 	}
 	
@@ -115,7 +95,7 @@ public class Reseau {
 		return new PersonneComposer<Personne>().numericLabel(colaborateurs, new Function<Personne, Boolean>() {
 			@Override
 			public Boolean apply(Personne arg0) {
-				return arg0.isClient();
+				return arg0 instanceof IClient && ((IClient)arg0).isClient();
 			}
 		});
 	}
@@ -128,7 +108,7 @@ public class Reseau {
 		return new PersonneComposer<Personne>().numericLabel(colaborateurs, new Function<Personne, Boolean>() {
 			@Override
 			public Boolean apply(Personne arg0) {
-				return arg0.isFournisseur();
+				return arg0 instanceof IFournisseur && ((IFournisseur)arg0).isFournisseur();
 			}
 		});
 	}

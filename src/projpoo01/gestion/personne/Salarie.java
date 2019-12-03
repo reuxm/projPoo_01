@@ -14,7 +14,6 @@ public class Salarie extends Personne implements IClient {
 	
 	private String insee;
 	private double salaire;
-	protected boolean fournisseur;
 	protected boolean client;
 	
 	public Salarie(String firstName, String lastName, String adresse, String vill, 
@@ -25,6 +24,11 @@ public class Salarie extends Personne implements IClient {
 		this.client=client;
 	}
 	
+	public Salarie(Salarie base) {
+		this(base.getFirstName(), base.getLastName(), base.getAdresse(), base.getVill(),
+				base.getCodePostal(), base.getInsee(), base.getSalaireValue(), base.isClient());
+	}
+
 	public String getSalaire() { //et formate    
 		return (new DecimalFormat("###,###,###.00").format(salaire))+" €";
 	}
@@ -45,11 +49,10 @@ public class Salarie extends Personne implements IClient {
 		if(client) {
 			description +="\n\t\trole suplementaire : client";	
 		}
-		if(fournisseur) {
-			description += (client?", ":"\n\t\trole suplementaire : ")+"fournisseur";
-		}
 		return description;
 	}
+	
+	// === From IClient ===
 
 	@Override
 	public void achete(List<Achat> achats) {
