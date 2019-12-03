@@ -254,7 +254,7 @@ public class Saisie {
 		return  data;
 	}
 	
-	private List<Achat> saisieAchats(){
+	public List<Achat> saisieAchats(){
 		List<Achat> achats = new ArrayList<Achat>();
 		
 		boolean more = false;
@@ -306,5 +306,34 @@ public class Saisie {
 		}while(more);
 		
 		return achats;
+	}
+
+	public IClient selectIClient() throws NoOptionException {
+		Map<Integer, Personne> clients = reseau.listClients();
+		if( clients.isEmpty() ) {
+			throw new NoOptionException("Aucun client enregistre");
+		}
+
+		for(Entry<Integer, Personne> client : clients.entrySet()) {
+			System.out.println( client.getKey()+">\t"+client.getValue() );
+		}
+		System.out.print("Quel client agit ? ");
+		boolean validChoice = true;
+		boolean nan;
+		int clientKey=-1;
+		do {
+			System.out.println("Votre choix ? ");
+			String input = scanner.nextLine();
+			try {
+				clientKey = Integer.parseInt(input);
+				validChoice=(clientKey>0 && clientKey<=clients.size());
+				nan = false;
+			} catch (NumberFormatException e) {
+				System.out.println("Veuillez entrer un nombre");
+				nan = true;
+			}
+		} while(nan || !validChoice);
+		
+		return (IClient)clients.get(clientKey);
 	}
 }

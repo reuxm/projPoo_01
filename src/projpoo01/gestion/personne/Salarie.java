@@ -4,6 +4,7 @@ import java.text.DecimalFormat;
 import java.util.List;
 
 import projpoo01.gestion.item.Achat;
+import projpoo01.gestion.item.Transaction;
 
 public class Salarie extends Personne implements IClient {
 
@@ -56,8 +57,7 @@ public class Salarie extends Personne implements IClient {
 
 	@Override
 	public void achete(List<Achat> achats) {
-		// TODO Auto-generated method stub
-		
+		enregistre( new Transaction(achats) );
 	}
 
 	@Override

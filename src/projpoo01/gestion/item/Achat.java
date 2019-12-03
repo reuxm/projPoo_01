@@ -2,7 +2,7 @@ package projpoo01.gestion.item;
 
 import java.util.Date;
 
-public class Achat {
+public class Achat extends Item {
 	
 	private Date date;
 	private String intitule;

@@ -1,6 +1,10 @@
 package projpoo01.gestion.personne;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
+import projpoo01.gestion.item.Transaction;
 
 public abstract class Personne implements Serializable {
 
@@ -14,14 +18,27 @@ public abstract class Personne implements Serializable {
 	private String adresse;
 	private String vill;
 	private String codePostal;
+	private List<Transaction> history;
 
 	public Personne(String firstName, String lastName, String adresse,
 			String vill, String codePostal) {
+		this.history = new ArrayList<Transaction>();
+		System.out.println(this.history);
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.adresse = adresse;
 		this.vill = vill;
 		this.codePostal = codePostal;
+	}
+	
+	public void enregistre(Transaction t) {
+		history.add(t);
+	}
+	
+	public void printHisto() {
+		for(Transaction t : history) {
+			System.out.println( t );
+		}
 	}
 
 	// === From Object ===

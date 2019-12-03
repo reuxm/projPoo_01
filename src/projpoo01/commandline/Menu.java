@@ -1,6 +1,5 @@
 package projpoo01.commandline;
 
-import java.util.Map;
 import java.util.Scanner;
 
 import projpoo01.Reseau;
@@ -8,6 +7,7 @@ import projpoo01.gestion.personne.*;
 import projpoo01.validity.FileInteractionException;
 import projpoo01.validity.Format;
 import projpoo01.validity.FormatException;
+import projpoo01.validity.NoOptionException;
 
 public class Menu {
 
@@ -60,6 +60,7 @@ public class Menu {
 					actionClients();
 					break;
 				case 5 ://action fournisseurs
+					actionFournisseur();
 					break;
 				case 6 ://save & quit
 					save();
@@ -69,7 +70,7 @@ public class Menu {
 			}
 		} while(choice!=actions.length);
 	}
-	
+
 	private void save() {
 		System.out.print("Enegistrer sous : ");
 		boolean validFile;
@@ -106,7 +107,7 @@ public class Menu {
 			}
 		}
 		
-		boolean validChoice = true;
+		boolean validChoice;
 		do {
 			System.out.println("\t> Creer un patron\n"
 				+ "\t2> Promouvoir une salarie\n"
@@ -129,6 +130,7 @@ public class Menu {
 			}while(nan);
 			
 			Salarie s;
+			validChoice = true;
 			switch(choice) {
 				case 1 :
 					s = saisie.saisiePatron( sc );
@@ -147,12 +149,60 @@ public class Menu {
 	}
 	
 	private void actionClients() {
-		Map<Integer, Personne> clients = reseau.listClients();
-		//choix acheteur
-		//faire achat
-		//passer commande
-		//pâyer
-		//annuler
+		Scanner sc = Saisie.getScanner();
+		
+		IClient client;
+		try {
+			client = saisie.selectIClient();
+		} catch (NoOptionException e) {
+			System.out.println( e.getMessage() );
+			return;
+		}
+		
+		String[] actions = {
+			"faire des achats",
+			"valider la commande",
+			"consulter historique",
+			"payer",
+			"annuler"
+		};
+		
+		int choice = -1;
+		boolean validChoice;
+		do {
+			System.out.println("\nActions possible : ");
+			for(int i=0;i<actions.length;i++ ) {
+				System.out.println( (i+1)+"> "+actions[i] );
+			}
+			System.out.print("Votre choix ? ");
+			
+			try {
+				String choiceLiteral = sc.nextLine();
+				choice = Integer.parseInt(choiceLiteral);
+			} catch(NumberFormatException e) {
+				System.out.println("Entrez un nombre SVP");
+			}
+			
+			validChoice = true;
+			switch(choice) {
+				case 1 ://faire des achats
+					client.achete( saisie.saisieAchats() );
+					break;
+				case 2 ://payer
+					client.paie();
+					break;
+				case 3 ://historique
+					System.out.println(client);
+					((Personne)client).printHisto();
+				case 4 ://annuler
+					break;
+				default :
+					validChoice = false;
+			}
+		} while(!validChoice);
 	}
 	
+	private void actionFournisseur() {
+		System.out.println("Pas encore implementé m(_ _)m");
+	}
 }
