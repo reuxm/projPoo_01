@@ -1,10 +1,14 @@
 package projpoo01.commandline;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.Map.Entry;
 
 import projpoo01.Reseau;
+import projpoo01.gestion.item.Achat;
 import projpoo01.gestion.personne.*;
 import projpoo01.util.PersonneComposer;
 import projpoo01.validity.*;
@@ -250,4 +254,57 @@ public class Saisie {
 		return  data;
 	}
 	
+	private List<Achat> saisieAchats(){
+		List<Achat> achats = new ArrayList<Achat>();
+		
+		boolean more = false;
+		do {
+			System.out.print("Intitule de l'article ? ");
+			String intitule = scanner.nextLine();
+			
+			int qte = 0;
+			boolean validNumber;
+			do{
+				System.out.print("Quantite ? ");
+				try {
+					qte = Format.checkInt( scanner.nextLine() );
+					validNumber = true;
+				} catch (FormatException e) {
+					System.out.println(e.getMessage());
+					validNumber = false;
+				}
+			}while(validNumber);
+			
+			Date date = new Date();;
+			boolean validDate;
+			do {
+				System.out.print("Date d'achat (laissez vide pour indiquer maintenant) ?");
+				try {
+					date = Format.checkDate( scanner.nextLine() );
+					validDate = true;
+				} catch (FormatException e) {
+					System.out.println( e.getMessage() );
+					validDate = false;
+				}
+			} while( !validDate );
+			
+			achats.add( new Achat( date, intitule, qte) );
+			
+			boolean validB;
+			do {
+				System.out.println("Saisir un autre achat ? [Y/N]");
+				String literalMore = scanner.nextLine();
+				validB = true;
+				try{
+					more = Format.checkBoolean( literalMore );
+				} catch(FormatException e) {
+					System.out.println(e.getMessage());
+					validB = false;
+				}
+			} while( !validB );
+			
+		}while(more);
+		
+		return achats;
+	}
 }

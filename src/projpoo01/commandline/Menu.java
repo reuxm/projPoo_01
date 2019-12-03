@@ -5,6 +5,7 @@ import java.util.Scanner;
 
 import projpoo01.Reseau;
 import projpoo01.gestion.personne.*;
+import projpoo01.validity.FileInteractionException;
 import projpoo01.validity.Format;
 import projpoo01.validity.FormatException;
 
@@ -21,10 +22,12 @@ public class Menu {
 	public void menu(){
 		Scanner sc = Saisie.getScanner();
 		String[] actions = {
+			"Saisir des Personnes",
 			"Nommer un patron",
 			"Afficher les collaborateurs",
 			"Action clients",
 			"Action fournisseur",
+			"Sauver et quitter",
 			"Quitter"
 		};
 		
@@ -44,23 +47,44 @@ public class Menu {
 			}
 			
 			switch(choice) {
-				case 1 ://nommer un patron
+				case 1 : //saisir des personnes
+					saisie.saisieInitiale();
+					break;
+				case 2 ://nommer un patron
 					patron(sc);
 					break;
-				case 2 ://afficher les listes
+				case 3 ://afficher les listes
 					System.out.println( reseau );
 					break;
-				case 3 :
+				case 4 :
 					actionClients();
 					break;
-				case 4 ://action fournisseurs
+				case 5 ://action fournisseurs
 					break;
-				case 5 : break;//quit
+				case 6 ://save & quit
+					save();
+					choice++;//change la valeur à 'quitter'
+				case 7 : break;//quit
 				default : System.out.println("Ce n'est pas une option valide");
 			}
 		} while(choice!=actions.length);
 	}
 	
+	private void save() {
+		System.out.print("Enegistrer sous : ");
+		boolean validFile;
+		do{
+			String target = Saisie.getScanner().nextLine();
+			try {
+				reseau.save( target );
+				validFile = true;
+			} catch (FileInteractionException e) {
+				System.out.println(e.getMessage());
+				validFile = false;
+			}
+		} while( !validFile );
+	}
+
 	private void patron(Scanner sc) {
 		System.out.println("1> Nommer un patron");
 		if(reseau.getPatron()!=null) {

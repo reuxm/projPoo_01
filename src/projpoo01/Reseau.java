@@ -1,5 +1,11 @@
 package projpoo01;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -11,6 +17,7 @@ import java.util.function.Function;
 import projpoo01.commandline.*;
 import projpoo01.gestion.personne.*;
 import projpoo01.util.PersonneComposer;
+import projpoo01.validity.FileInteractionException;
 
 public class Reseau implements Serializable {
 
@@ -31,10 +38,68 @@ public class Reseau implements Serializable {
 	}
 	
 	public static void main(String[] args) {
-		Reseau reseau = new Reseau();
+		Reseau reseau = init();
 		Saisie saisie = new Saisie(reseau);
-		saisie.saisieInitiale();
 		new Menu(reseau, saisie).menu();
+	}
+	
+	public static Reseau init() {
+		Scanner sc = Saisie.getScanner();
+		System.out.print("Fichier à ouvrir (laisser vide pour creer un nouveau reseau) : ");
+		String path = sc.nextLine();
+		if( !path.equals("") ) {
+			try {
+				return load(path);
+			} catch (FileInteractionException e) {
+				//en cas d'erreur, traiter comme une entree vide -> fait hors du try/catch
+			}
+		}
+		return new Reseau();
+	}
+	
+	public static Reseau load(String target) throws FileInteractionException {
+		Reseau reseau;
+		
+		FileInputStream fis = null;
+		try {
+			fis = new FileInputStream( target );
+		} catch (FileNotFoundException e1) {
+			throw new FileInteractionException("Fichier introuvable");
+		}
+		try {
+			ObjectInputStream ois = new ObjectInputStream(fis);
+			try {
+				reseau = (Reseau)ois.readObject();
+			} catch (ClassNotFoundException e) {
+				throw new FileInteractionException("Fichier au format incorrect");
+			} finally {
+				ois.close();
+				fis.close();
+			}
+		} catch (IOException e) {
+			throw new FileInteractionException("Erreur lors de la lecture");
+		}
+		
+		return reseau;
+	}
+
+	public void save(String target) throws FileInteractionException {
+		FileOutputStream fos = null;
+		try {
+			fos = new FileOutputStream( target );
+		} catch (FileNotFoundException e1) {
+			throw new FileInteractionException("Fichier cible indisponible");
+		}
+		
+		ObjectOutputStream oos;
+		try {
+			oos = new ObjectOutputStream(fos);
+			oos.writeObject(this);
+			oos.flush();
+			oos.close();
+		} catch (IOException e) {
+			throw new FileInteractionException("Echec de l'ecriture");
+		}
 	}
 	
 	@Override

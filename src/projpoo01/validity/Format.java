@@ -1,10 +1,15 @@
 package projpoo01.validity;
 
+import java.text.DateFormat;
 import java.text.DecimalFormat;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
+
 
 public class Format {
 
@@ -57,5 +62,30 @@ public class Format {
 			return literalT.contains(txt);
 		}
 		throw new FormatException("Booleen non reconnu");
+	}
+
+	public static int checkInt(String value) throws FormatException {
+		try {
+			return Integer.parseInt( value );
+		} catch (NumberFormatException e) {
+			throw new FormatException("Veuillez entrer un nombre");
+		}
+	}
+
+	public static Date checkDate(String value) throws FormatException {
+		if(value.equals("")) {
+			return new Date();
+		}
+		Date d;
+		try {
+			d = DateFormat.getDateInstance( DateFormat.LONG, Locale.FRANCE ).parse( value );
+		} catch (ParseException e) {
+			d=null;
+		}
+		if(d!=null) {
+			return d;
+		}
+		throw new FormatException("Date invalide");
+		
 	}
 }
