@@ -34,6 +34,10 @@ public abstract class Personne implements Serializable {
 		history.add(t);
 	}
 	
+	public List<Transaction> getHisto() {
+		return history;
+	}
+	
 	public void printHisto() {
 		for(Transaction t : history) {
 			System.out.println( t );

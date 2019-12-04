@@ -1,7 +1,8 @@
 package projpoo01.gestion.personne;
 
-import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.List;
+import java.util.Locale;
 
 import projpoo01.gestion.item.Achat;
 import projpoo01.gestion.item.Transaction;
@@ -30,12 +31,17 @@ public class Salarie extends Personne implements IClient {
 				base.getCodePostal(), base.getInsee(), base.getSalaireValue(), base.isClient());
 	}
 
+	@SuppressWarnings("static-access")
 	public String getSalaire() { //et formate    
-		return (new DecimalFormat("###,###,###.00").format(salaire))+" €";
+		return NumberFormat.getCurrencyInstance(Locale.FRANCE).format(salaire).replace(",", ".");
 	}
 	
 	public double getSalaireValue() {
 		return this.salaire;
+	}
+	
+	public void setSalaire(double salaire) {
+		this.salaire = salaire;
 	}
 	
 	public String getInsee() {

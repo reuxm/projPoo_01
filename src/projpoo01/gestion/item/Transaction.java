@@ -28,6 +28,10 @@ public class Transaction implements Serializable{
 		 
 	}
 	
+	public List<Item> items(){
+		return items;
+	}
+	
 	@Override
 	public String toString() {
 		String print = "Transaction "+id+"[";
