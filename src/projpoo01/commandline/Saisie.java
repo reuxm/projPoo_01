@@ -8,7 +8,7 @@ import java.util.Scanner;
 import java.util.Map.Entry;
 
 import projpoo01.Reseau;
-import projpoo01.gestion.item.Achat;
+import projpoo01.gestion.item.*;
 import projpoo01.gestion.personne.*;
 import projpoo01.util.PersonneComposer;
 import projpoo01.validity.*;
@@ -45,7 +45,7 @@ public class Saisie {
 				} finally {
 					sc.nextLine();//conssome le EOL laissé par le nextInt() precedent
 				}
-			} while(!validNumber);
+			} while( !validNumber );
 			
 			switch(categorie) {
 				case "salarie":this.saisieSalaries(groupSize, sc);break;
@@ -76,7 +76,7 @@ public class Saisie {
 			boolean f = false;
 			boolean validB;
 			do{
-				System.out.println("Ce client est-il aussi un fournisseur ? [Y/N]");
+				System.out.print("Ce client est-il aussi un fournisseur ? [Y/N]");
 				String fournisseur = sc.nextLine();
 				validB = true;
 				try{
@@ -102,20 +102,20 @@ public class Saisie {
 				System.out.print("Fournisseur "+i+" :\nNum Fournisseur ? ");
 				numFour=sc.nextLine();
 				try {//Contrainte : unicité
-					Format.checkPK(numFour, reseau.getFournisseurs().keySet(), "numero Fournissuer");
+					Format.checkPK(numFour, reseau.getFournisseurs().keySet(), "numero Fournisseur");
 					validID = true;
 				} catch (FormatException e) {
 					System.out.println(e.getMessage());
 					validID = false;
 				}
-			} while(!validID);
+			} while( !validID );
 			
 			String[] newP = saisiePersonne(sc);
 
 			boolean c = false;
 			boolean validB;
 			do {
-				System.out.println("Ce fournissseur est-il aussi un client ? [Y/N]");
+				System.out.print("Ce fournissseur est-il aussi un client ? [Y/N]");
 				String client = sc.nextLine();
 				try {
 					c = Format.checkBoolean(client);
@@ -124,7 +124,7 @@ public class Saisie {
 					System.out.println(e.getMessage());
 					validB = false;
 				}
-			} while(!validB);
+			} while( !validB );
 				
 				reseau.getFournisseurs().put(
 					numFour,
@@ -137,7 +137,6 @@ public class Saisie {
 	public Salarie saisiePatron(Scanner sc) {
 		Salarie s = saisieSalarie(sc, "Patron");
 		//pas d'info suplémentaires à saisir - pour l'instant
-		
 		return s;
 	}
 	
@@ -202,7 +201,7 @@ public class Saisie {
 		boolean c = false;
 		boolean validBC;
 		do {
-			System.out.println("Ce salarie est-il aussi un client ? [Y/N]");
+			System.out.print("Ce salarie est-il aussi un client ? [Y/N]");
 			String client = sc.nextLine();
 			try {
 				c = Format.checkBoolean(client);
@@ -273,7 +272,7 @@ public class Saisie {
 					System.out.println(e.getMessage());
 					validNumber = false;
 				}
-			}while(validNumber);
+			} while( !validNumber );
 			
 			Date date = new Date();;
 			boolean validDate;
@@ -292,7 +291,7 @@ public class Saisie {
 			
 			boolean validB;
 			do {
-				System.out.println("Saisir un autre achat ? [Y/N]");
+				System.out.print("Saisir un autre achat ? [Y/N]");
 				String literalMore = scanner.nextLine();
 				validB = true;
 				try{
@@ -303,7 +302,7 @@ public class Saisie {
 				}
 			} while( !validB );
 			
-		}while(more);
+		} while( more );
 		
 		return achats;
 	}
@@ -332,7 +331,7 @@ public class Saisie {
 				System.out.println("Veuillez entrer un nombre");
 				nan = true;
 			}
-		} while(nan || !validChoice);
+		} while( nan || !validChoice );
 		
 		return (IClient)clients.get(clientKey);
 	}

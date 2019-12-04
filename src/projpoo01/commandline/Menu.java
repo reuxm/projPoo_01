@@ -27,7 +27,7 @@ public class Menu {
 			"Afficher les collaborateurs",
 			"Action clients",
 			"Action fournisseur",
-			"Sauver et quitter",
+			"Sauver",
 			"Quitter"
 		};
 		
@@ -64,7 +64,7 @@ public class Menu {
 					break;
 				case 6 ://save & quit
 					save();
-					choice++;//change la valeur à 'quitter'
+					break;
 				case 7 : break;//quit
 				default : System.out.println("Ce n'est pas une option valide");
 			}

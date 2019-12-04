@@ -1,10 +1,16 @@
 package projpoo01.gestion.item;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Transaction {
+public class Transaction implements Serializable{
 
+	/**
+	 * Generated serial version ID
+	 */
+	private static final long serialVersionUID = -6262927591634991570L;
+	
 	public static int number=1;
 	
 	private int id;

@@ -23,7 +23,6 @@ public abstract class Personne implements Serializable {
 	public Personne(String firstName, String lastName, String adresse,
 			String vill, String codePostal) {
 		this.history = new ArrayList<Transaction>();
-		System.out.println(this.history);
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.adresse = adresse;

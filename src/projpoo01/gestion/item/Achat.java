@@ -4,6 +4,10 @@ import java.util.Date;
 
 public class Achat extends Item {
 	
+	/**
+	 * Generated serial version ID
+	 */
+	private static final long serialVersionUID = -3016369385593508290L;
 	private Date date;
 	private String intitule;
 	private int quantite;
@@ -14,6 +18,11 @@ public class Achat extends Item {
 		this.quantite = i;
 	}
 
+	@Override
+	public String toString() {
+		return quantite+" "+intitule+" - achete le "+date;
+	}
+	
 	public Date getDate() {
 		return date;
 	}
