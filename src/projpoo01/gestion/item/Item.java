@@ -2,6 +2,11 @@ package projpoo01.gestion.item;
 
 import java.io.Serializable;
 
+/**
+ * Un element pouvant faire l'objet d'une {@link Transaction}
+ * 
+ * @author Matthias
+ */
 public abstract class Item implements Serializable {
 
 	/**

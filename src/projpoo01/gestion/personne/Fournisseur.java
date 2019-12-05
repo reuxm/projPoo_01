@@ -6,6 +6,11 @@ import projpoo01.gestion.item.Achat;
 import projpoo01.gestion.item.Commande;
 import projpoo01.gestion.item.Transaction;
 
+/**
+ * Un fournisseur de l'entreprise
+ * 
+ * @author Matthias
+ */
 public class Fournisseur extends Personne implements IClient, IFournisseur {
 
 	/**
@@ -16,6 +21,14 @@ public class Fournisseur extends Personne implements IClient, IFournisseur {
 	private String num;
 	protected boolean client;
 	
+	/**
+	 * Creation d'un fournisseur avec tous ses champs. Voir
+	 * @link Personne#Personne(String, String, String, String, String)}
+	 * pour les paramètres communs.
+	 * 
+	 * @param numFour l'identifiant unique du fournisseur
+	 * @param client le fournisseur a-t-il egalement un role de client?
+	 */
 	public Fournisseur(String firstName, String lastName, String adresse, String vill, 
 			String codePostal, String numFour, boolean client) {
 		super(firstName, lastName, adresse, vill, codePostal);
@@ -36,9 +49,12 @@ public class Fournisseur extends Personne implements IClient, IFournisseur {
 
 	// === From IFournisseur ===
 	
+	/**
+	 * Renvoie toujours true : /un fournisseur est toujours un fournisseur
+	 */
 	@Override
 	public boolean isFournisseur() {
-		return true;//un fournisseur est toujours un fournisseur
+		return true;
 	}
 
 	@Override

@@ -7,6 +7,13 @@ import java.util.function.Function;
 
 import projpoo01.gestion.personne.Personne;
 
+/**
+ * L'instance de {@link ListLabeler} utilisee pour nos {@link Personne}
+ * 
+ * @author Matthias
+ *
+ * @param <T>
+ */
 public class PersonneComposer<T extends Personne> implements ListLabeler<Personne> {
 
 	@Override

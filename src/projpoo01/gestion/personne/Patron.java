@@ -1,5 +1,11 @@
 package projpoo01.gestion.personne;
 
+/**
+ * Specialisation de {@link Salarie}
+ * aucune methode suplemtaire instanciee pour l'instant
+ * 
+ * @author matthias
+ */
 public class Patron extends Salarie implements IPatron {
 
 	/**

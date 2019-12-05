@@ -32,7 +32,7 @@ public class TestSaisieUnicite {
 		try {
 			Format.checkPK("A", list, "");
 		} catch (FormatException e) {
-			fail("Exception inattendu lors du cas nominal");
+			fail("Exception inattendu lors d'un cas accepte");
 		}
 
 	}

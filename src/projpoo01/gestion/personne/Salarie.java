@@ -7,6 +7,11 @@ import java.util.Locale;
 import projpoo01.gestion.item.Achat;
 import projpoo01.gestion.item.Transaction;
 
+/**
+ * Un salarie de l'entreprise
+ * 
+ * @author Matthias
+ */
 public class Salarie extends Personne implements IClient {
 
 	/**
@@ -18,6 +23,14 @@ public class Salarie extends Personne implements IClient {
 	private double salaire;
 	protected boolean client;
 	
+	/**
+	 * Creation d'un salarie. Voir {@link Personne#Personne(String, String, String, String, String)}
+	 * pour les paramètres communs.
+	 * 
+	 * @param insee le numero de securite sociale
+	 * @param salaire le salaire
+	 * @param client le salarie a-t-il egalement un role de client?
+	 */
 	public Salarie(String firstName, String lastName, String adresse, String vill, 
 			String codePostal, String insee, double salaire, boolean client) {
 		super(firstName, lastName, adresse, vill, codePostal);
@@ -26,16 +39,31 @@ public class Salarie extends Personne implements IClient {
 		this.client=client;
 	}
 	
+	/**
+	 * Copie un Salarie
+	 * 
+	 * @param base l'original
+	 */
 	public Salarie(Salarie base) {
 		this(base.getFirstName(), base.getLastName(), base.getAdresse(), base.getVill(),
 				base.getCodePostal(), base.getInsee(), base.getSalaireValue(), base.isClient());
 	}
 
+	/**
+	 * Format ela salaire au formar de {@link Locale.FRANCE}
+	 * 
+	 * @return le salaire formate
+	 */
 	@SuppressWarnings("static-access")
 	public String getSalaire() { //et formate    
 		return NumberFormat.getCurrencyInstance(Locale.FRANCE).format(salaire).replace(",", ".");
 	}
 	
+	/**
+	 * Recupere le salaire en tant que valuer numerique simple
+	 * 
+	 * @return
+	 */
 	public double getSalaireValue() {
 		return this.salaire;
 	}

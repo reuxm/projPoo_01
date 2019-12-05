@@ -10,9 +10,20 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
-
+/**
+ * Classe verifiant la validite des donnees circulant dans l'application
+ * 
+ * @author Matthias
+ */
 public class Format {
 
+	/**
+	 * Verifie le code postal<br>
+	 * la contrainte est : le code postal doit etre compose d'exactement 5 chiffres
+	 * 
+	 * @param cp le code postal a valider
+	 * @throws FormatException si la contrainte n'est pas validee
+	 */
 	public static void checkCP(String cp) throws FormatException {
 		boolean b = false;
 		try {
@@ -26,6 +37,13 @@ public class Format {
 		}
 	}
 
+	/**
+	 * Verifie le numero de securite social<br>
+	 * la contrainte est : le numero doit etre compose d'exactement 13 chiffres
+	 * 
+	 * @param cp le numero a valider
+	 * @throws FormatException si la contrainte n'est pas validee
+	 */
 	public static void checkInsee(String insee) throws FormatException {
 		boolean b = false;
 		try {
@@ -39,6 +57,15 @@ public class Format {
 		}
 	}
 	
+	/**
+	 * Verifie le format du salaire<br>
+	 * le salaire doit etre compose de chiffres, avec un point ou une virgule comme
+	 * separateur
+	 * 
+	 * @param salaire le salaire a tester
+	 * @return le salaire choisi sous forme numerique
+	 * @throws FormatException si la contrainte n'est pas validee
+	 */
 	public static double checkSalaire(String salaire) throws FormatException {
 		try{
 			double salaireFormate = Double.parseDouble(salaire.replace(',', '.'));
@@ -49,12 +76,29 @@ public class Format {
 		}
 	}
 
+	/**
+	 * Verifie la contrainte d'unicite d'une clef
+	 * 
+	 * @param key la clef a tester
+	 * @param keySet la liste des clefs auxquelles comparer l'entree
+	 * @param nomage le nom de la clef a mettre dans les messages d'erreurs
+	 * @throws FormatException si la contrainte n'est pas validee
+	 */
 	public static void checkPK(String key, Set<String> keySet, String nomage) throws FormatException {
 		if(keySet.contains(key) ) {
 			throw new FormatException("Le "+nomage+" existe deja associe a une autre personne ou entite");
 		}
 	}
 
+	/**
+	 * Verifie que la donne d'entree est un booleen<br>
+	 * entrees acceptees pour true : Y y O o 1
+	 * entrees acceptees pour false : N n 0
+	 * 
+	 * @param txt la donne a tester
+	 * @return le booleen correspondant a l'entree
+	 * @throws FormatException si l'entree n'est pas valide
+	 */
 	public static boolean checkBoolean(String txt) throws FormatException {
 		List<String> literalT = new ArrayList<String>(Arrays.asList("Y","y","O","o","1"));
 		List<String> literalF = new ArrayList<String>(Arrays.asList("N","n","0"));
@@ -64,6 +108,13 @@ public class Format {
 		throw new FormatException("Booleen non reconnu");
 	}
 
+	/**
+	 * Verifie que l'entree est un nombre
+	 * 
+	 * @param value l'entree a tester
+	 * @return l'entree sous forme numerique
+	 * @throws FormatException si l'entree n'est pas valide
+	 */
 	public static int checkInt(String value) throws FormatException {
 		try {
 			return Integer.parseInt( value );
@@ -72,6 +123,13 @@ public class Format {
 		}
 	}
 
+	/**
+	 * Verifie que l'entree est une date et la formate
+	 * 
+	 * @param value la donnee a tester
+	 * @return l'entree sous forme de Date au format défini par {@link Locale.FRANCE}
+	 * @throws FormatException si l'entree n'est pas une date
+	 */
 	public static Date checkDate(String value) throws FormatException {
 		if(value.equals("")) {
 			return new Date();

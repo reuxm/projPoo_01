@@ -1,5 +1,10 @@
 package projpoo01.validity;
 
+/**
+ * Exception levee lors d'une mauvaise utilisation de liste
+ * 
+ * @author matthias
+ */
 public class NoOptionException extends Exception {
 
 	/**

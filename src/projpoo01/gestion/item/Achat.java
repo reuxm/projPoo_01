@@ -2,6 +2,11 @@ package projpoo01.gestion.item;
 
 import java.util.Date;
 
+/**
+ * Objet representant un achat d'un certain nombre d'objet identiques
+ * 
+ * @author matthias
+ */
 public class Achat extends Item {
 	
 	/**
@@ -23,14 +28,23 @@ public class Achat extends Item {
 		return quantite+" "+intitule+" - achete le "+date;
 	}
 	
+	/**
+	 * @return la date d'achat
+	 */
 	public Date getDate() {
 		return date;
 	}
 
+	/**
+	 * @return le nom de l'objet concerne par l'achat
+	 */
 	public String getIntitule() {
 		return intitule;
 	}
 
+	/**
+	 * @return la quanite d'objets achete
+	 */
 	public int getQuantite() {
 		return quantite;
 	}

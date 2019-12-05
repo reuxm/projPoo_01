@@ -6,6 +6,12 @@ import java.util.List;
 
 import projpoo01.gestion.item.Transaction;
 
+/**
+ * Squelette d'une personne comprenant les données minimales commune
+ * a toute personne, physique ou morale, avec laquelle on interagit 
+ * 
+ * @author Matthias
+ */
 public abstract class Personne implements Serializable {
 
 	/**
@@ -20,13 +26,22 @@ public abstract class Personne implements Serializable {
 	private String codePostal;
 	private List<Transaction> history;
 
+	/**
+	 * Creation d'une personne avec les donnees minimales
+	 * 
+	 * @param firstName le prenom
+	 * @param lastName le nom
+	 * @param adresse l'adresse
+	 * @param codePostal le code postal
+	 * @param ville la ville
+	 */
 	public Personne(String firstName, String lastName, String adresse,
-			String vill, String codePostal) {
+			String ville, String codePostal) {
 		this.history = new ArrayList<Transaction>();
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.adresse = adresse;
-		this.vill = vill;
+		this.vill = ville;
 		this.codePostal = codePostal;
 	}
 	

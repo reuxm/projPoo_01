@@ -2,6 +2,11 @@ package projpoo01.validity;
 
 import java.io.IOException;
 
+/**
+ * Exception levee en cas d'erreur lors de la manipulation des fichiers de sauvegarde
+ * 
+ * @author Matthias
+ */
 public class FileInteractionException extends IOException {
 
 	/**

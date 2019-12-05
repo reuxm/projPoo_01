@@ -9,16 +9,33 @@ import projpoo01.validity.Format;
 import projpoo01.validity.FormatException;
 import projpoo01.validity.NoOptionException;
 
+/**
+ * Menu de l'application en ligne de commande <br> Les donnees sont en dur
+ * dans la classe : pas de personnalisation possible
+ * 
+ * @author Matthias
+ *
+ */
 public class Menu {
 
 	private Reseau reseau;
 	private Saisie saisie;
 	
+	/**
+	 * Constructeur du menu.<br>Cette classe necessite un {@link Reseau} a remplir
+	 * et une classe de {@link Saisie}
+	 * 
+	 * @param r le {@link Reseau} a remplir
+	 * @param s l'objet permettant d'obtenir les donnees utilisateur
+	 */
 	public Menu(Reseau r, Saisie s) {
 		this.reseau = r;
 		this.saisie = s;
 	}
 	
+	/**
+	 * Lance le menu
+	 */
 	public void menu(){
 		Scanner sc = Saisie.getScanner();
 		String[] actions = {
@@ -133,7 +150,7 @@ public class Menu {
 			validChoice = true;
 			switch(choice) {
 				case 1 :
-					s = saisie.saisiePatron( sc );
+					s = saisie.saisiePatron();
 					reseau.setPatron( s );
 					break;
 				case 2 :

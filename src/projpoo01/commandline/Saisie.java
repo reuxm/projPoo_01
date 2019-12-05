@@ -13,20 +13,38 @@ import projpoo01.gestion.personne.*;
 import projpoo01.util.PersonneComposer;
 import projpoo01.validity.*;
 
+/**
+ * Classe du projet responsable de la saisie utilisateur
+ * 
+ * @author Matthias
+ *
+ */
 public class Saisie {
 
 	private Reseau reseau;
 	private static Scanner scanner = new Scanner(System.in);
 	
+	/**
+	 * Constructeur de la classe de Saisie
+	 * 
+	 * @param r le {@link Reseau} dans lequel les informations saisies serront enregistrees
+	 */
 	public Saisie(Reseau r) {
 		this.reseau = r;
 	}
 
+	/**
+	 * Le scanner de l'application est gere par cette classe
+	 * 
+	 * @return une reference au {@link java.util.Scanner} utilise dans l'application
+	 */
 	public static Scanner getScanner() {
 		return scanner;
 	}
 
-	
+	/**
+	 * La saisie initiale du {@link Reseau}, avec ses {@link Salarie}s, ses {@link Client}s et {@link Fournisseur}s
+	 */
 	public void saisieInitiale() {
 		Scanner sc = Saisie.getScanner();
 		
@@ -48,20 +66,25 @@ public class Saisie {
 			} while( !validNumber );
 			
 			switch(categorie) {
-				case "salarie":this.saisieSalaries(groupSize, sc);break;
-				case "client":this.saisieClients(groupSize, sc);break;
-				default:this.saisieFournisseurs(groupSize ,sc);//default vaut toujours fournisseur, voir String[] categories
+				case "salarie":this.saisieSalaries(groupSize);break;
+				case "client":this.saisieClients(groupSize);break;
+				default:this.saisieFournisseurs(groupSize);//default vaut toujours fournisseur, voir String[] categories
 			}
 		}
 	}
 	
-	public void saisieClients(int groupSize, Scanner sc) {
+	/**
+	 * Saisie d'un groupe de {@link Salarie}s
+	 * 
+	 * @param groupSize le nombre de {@link Salarie}s a saisir
+	 */
+	public void saisieClients(int groupSize) {
 		for(int i=1;i<=groupSize;i++) {
 			String numClient;
 			boolean validID;
 			do{
 				System.out.print("Client "+i+" : \nNum Client ? ");
-				numClient=sc.nextLine();
+				numClient=scanner.nextLine();
 				try {//Contrainte : unicité
 					Format.checkPK(numClient, reseau.getClients().keySet(), "numero Client");
 					validID = true;
@@ -71,13 +94,13 @@ public class Saisie {
 				}
 			} while(!validID);
 			
-			String[] newP = saisiePersonne(sc);
+			String[] newP = saisiePersonne();
 
 			boolean f = false;
 			boolean validB;
 			do{
 				System.out.print("Ce client est-il aussi un fournisseur ? [Y/N]");
-				String fournisseur = sc.nextLine();
+				String fournisseur = scanner.nextLine();
 				validB = true;
 				try{
 					f = Format.checkBoolean(fournisseur);
@@ -94,13 +117,18 @@ public class Saisie {
 		}
 	}
 
-	public void saisieFournisseurs(int groupSize, Scanner sc) {
+	/**
+	 * Saisie d'un groupe de {@link Fournisseur}s
+	 * 
+	 * @param groupSize le nombre de {@link Fournisseur}s a saisir
+	 */
+	public void saisieFournisseurs(int groupSize) {
 		for(int i=1;i<=groupSize;i++) {
 			String numFour;
 			boolean validID;
 			do {
 				System.out.print("Fournisseur "+i+" :\nNum Fournisseur ? ");
-				numFour=sc.nextLine();
+				numFour=scanner.nextLine();
 				try {//Contrainte : unicité
 					Format.checkPK(numFour, reseau.getFournisseurs().keySet(), "numero Fournisseur");
 					validID = true;
@@ -110,13 +138,13 @@ public class Saisie {
 				}
 			} while( !validID );
 			
-			String[] newP = saisiePersonne(sc);
+			String[] newP = saisiePersonne();
 
 			boolean c = false;
 			boolean validB;
 			do {
 				System.out.print("Ce fournissseur est-il aussi un client ? [Y/N]");
-				String client = sc.nextLine();
+				String client = scanner.nextLine();
 				try {
 					c = Format.checkBoolean(client);
 					validB = true;
@@ -134,12 +162,22 @@ public class Saisie {
 		}
 	}
 
-	public Salarie saisiePatron(Scanner sc) {
-		Salarie s = saisieSalarie(sc, "Patron");
+	/**
+	 * Saisie du {@link Patron}
+	 * 
+	 * @return un {@link Salarie} qui doit etre promu par l'appelant
+	 */
+	public Salarie saisiePatron() {
+		Salarie s = saisieSalarie("Patron");
 		//pas d'info suplémentaires à saisir - pour l'instant
 		return s;
 	}
 	
+	/**
+	 * Selectionne un {@link Salarie} a promouvoir {@link Patron}
+	 * 
+	 * @return l'heureux elu
+	 */
 	public Salarie choosePatron() {
 		Map<Integer, Personne> personnes = new PersonneComposer<Salarie>().numericLabel(reseau.getSalaries().values());
 		Scanner sc = Saisie.getScanner();
@@ -167,12 +205,12 @@ public class Saisie {
 		return (Salarie) personnes.get(choice);
 	}
 
-	private Salarie saisieSalarie(Scanner sc, String namePrompt) {
+	private Salarie saisieSalarie(String namePrompt) {
 		String insee;
 		boolean validInsee;
 		do {
 			System.out.print(namePrompt+" :\nNum de securite sociale ? ");
-			insee=sc.nextLine();
+			insee=scanner.nextLine();
 			try{
 				Format.checkInsee(insee) ;//Contrainte : 13 chiffres 
 				Format.checkPK(insee, reseau.getSalaries().keySet(), "numero de securite sociale");//Contrainte : unicité
@@ -187,7 +225,7 @@ public class Saisie {
 		boolean validSalaire;
 		do {
 			System.out.print("Salaire (precision max 0,01€)? ");
-			String salaire=sc.nextLine();
+			String salaire=scanner.nextLine();
 			try {
 				salaireFormate= Format.checkSalaire(salaire);
 				validSalaire = true;
@@ -196,13 +234,13 @@ public class Saisie {
 				validSalaire = false;
 			}
 		} while(!validSalaire);
-		String[] newP = saisiePersonne(sc);
+		String[] newP = saisiePersonne();
 		
 		boolean c = false;
 		boolean validBC;
 		do {
 			System.out.print("Ce salarie est-il aussi un client ? [Y/N]");
-			String client = sc.nextLine();
+			String client = scanner.nextLine();
 			try {
 				c = Format.checkBoolean(client);
 				validBC = true;
@@ -215,28 +253,33 @@ public class Saisie {
 		return new Salarie(newP[0], newP[1], newP[2], newP[3], newP[4], insee, salaireFormate, c);
 	}
 
-	public void saisieSalaries(int groupSize, Scanner sc) {
+	/**
+	 * Saisie d'un groupe de {@link Salarie}s
+	 * 
+	 * @param groupSize le nombre de {@link Salarie}s a saisir
+	 */
+	public void saisieSalaries(int groupSize) {
 		for(int i=1;i<=groupSize;i++) {
-			Salarie s = saisieSalarie(sc, "Salarie "+i);
+			Salarie s = saisieSalarie("Salarie "+i);
 			reseau.getSalaries().put( s.getInsee(), s );	
 		}
 	}
 	
-	private String[] saisiePersonne(Scanner sc) {
+	private String[] saisiePersonne() {
 		System.out.print("Nom ? ");
-		String n = sc.nextLine();
+		String n = scanner.nextLine();
 		
 		System.out.print("Prenom ? ");
-		String p = sc.nextLine();
+		String p = scanner.nextLine();
 		
 		System.out.print("Adresse ? ");
-		String a = sc.nextLine();
+		String a = scanner.nextLine();
 
 		boolean validCP;
 		String cp;
 		do{
 			System.out.print("Code Postal ? ");
-			cp = sc.nextLine();
+			cp = scanner.nextLine();
 			try {
 				Format.checkCP(cp);//Contrainte : 5 chiffres
 				validCP = true;
@@ -247,12 +290,17 @@ public class Saisie {
 		} while(!validCP);
 		
 		System.out.print("Ville ? ");
-		String v = sc.nextLine();
+		String v = scanner.nextLine();
 		
 		String[] data = {p, n, a, v, cp};
 		return  data;
 	}
 	
+	/**
+	 * Saisie d'une liste d'{@link Achat}s
+	 * 
+	 * @return
+	 */
 	public List<Achat> saisieAchats(){
 		List<Achat> achats = new ArrayList<Achat>();
 		
@@ -307,6 +355,12 @@ public class Saisie {
 		return achats;
 	}
 
+	/**
+	 * Choix d'un {@link IClient} parmi ceux enregistre
+	 * 
+	 * @return le {@link} IClient choisi
+	 * @throws NoOptionException si aucun IClient n'existe
+	 */
 	public IClient selectIClient() throws NoOptionException {
 		Map<Integer, Personne> clients = reseau.listClients();
 		if( clients.isEmpty() ) {

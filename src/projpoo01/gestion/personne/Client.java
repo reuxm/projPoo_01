@@ -6,6 +6,11 @@ import projpoo01.gestion.item.Achat;
 import projpoo01.gestion.item.Commande;
 import projpoo01.gestion.item.Transaction;
 
+/**
+ * Un client de l'entreprise
+ * 
+ * @author Matthias
+ */
 public class Client extends Personne implements IClient, IFournisseur {
 
 	/**
@@ -16,6 +21,14 @@ public class Client extends Personne implements IClient, IFournisseur {
 	private String num;
 	protected boolean fournisseur;
 	
+	/**
+	 * Creation d'un client avec tous ses champs. Voir
+	 * @link Personne#Personne(String, String, String, String, String)}
+	 * pour les paramètres communs.
+	 * 
+	 * @param numClient l'identifiant unique du client
+	 * @param fournisseur ce client est-il egalement un fournisseur
+	 */
 	public Client(String firstName, String lastName, String adresse, String vill,
 			String codePostal, String numClient, boolean fournisseur) {
 		super(firstName, lastName, adresse, vill, codePostal);
@@ -36,9 +49,12 @@ public class Client extends Personne implements IClient, IFournisseur {
 	
 	// === From IClient
 
+	/**
+	 * Renvoie toujours true : un client est toujours client
+	 */
 	@Override
 	public boolean isClient() {
-		return true;//un client est toujours client
+		return true;
 	}
 
 	@Override

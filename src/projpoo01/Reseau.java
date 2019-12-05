@@ -19,6 +19,14 @@ import projpoo01.gestion.personne.*;
 import projpoo01.util.PersonneComposer;
 import projpoo01.validity.FileInteractionException;
 
+/**
+ * Classe principale du projet
+ * <br> Represente le reseau d'une entreprise, avec ses {@link Client}s,
+ * ses {@link Fournisseur}s et ses {@link Salarie}
+ * 
+ * @author Matthias
+ *
+ */
 public class Reseau implements Serializable {
 
 	/**
@@ -31,19 +39,27 @@ public class Reseau implements Serializable {
 	private Map<String, Salarie> salaries;
 	private Patron patron;
 
+	/**
+	 * Creer un {@link Reseau} sans aucune personne enregistree
+	 */
 	public Reseau() {
 		clients = new HashMap<String, Client>();
 		fournisseurs = new HashMap<String, Fournisseur>();
 		salaries = new HashMap<String, Salarie>();
 	}
 	
+	/**
+	 * Lance la saisie d'un {@link Reseau} en ligne de commande
+	 * 
+	 * @param args default du main - inutilsé ici
+	 */
 	public static void main(String[] args) {
 		Reseau reseau = init();
 		Saisie saisie = new Saisie(reseau);
 		new Menu(reseau, saisie).menu();
 	}
 	
-	public static Reseau init() {
+	private static Reseau init() {
 		Scanner sc = Saisie.getScanner();
 		System.out.print("Fichier à ouvrir (laisser vide pour creer un nouveau reseau) : ");
 		String path = sc.nextLine();
@@ -57,6 +73,13 @@ public class Reseau implements Serializable {
 		return new Reseau();
 	}
 	
+	/**
+	 * Importe un {@link Reseau} depuis le disque
+	 * 
+	 * @param target l'emplacement de la sauvegarde
+	 * @return Une instance de {@link Reseau} correspondant au fichier donne
+	 * @throws FileInteractionException si le fichier n'existe pas ou n'est pas conforme
+	 */
 	public static Reseau load(String target) throws FileInteractionException {
 		Reseau reseau;
 		
@@ -83,6 +106,11 @@ public class Reseau implements Serializable {
 		return reseau;
 	}
 
+	/**
+	 * 
+	 * @param target l'emplacement de la sauvegarde
+	 * @throws FileInteractionException si la sauvegarde echoue
+	 */
 	public void save(String target) throws FileInteractionException {
 		FileOutputStream fos = null;
 		try {
@@ -152,6 +180,11 @@ public class Reseau implements Serializable {
 		salaries.put(patron.getInsee(), patron);
 	}
 	
+	/**
+	 * Liste les personnes ayant le role {@link IClient} parmi les {@link Salarie}s, {@link Client}s et
+	 * {@link Fournisseur}s enregistres
+	 * @return une {@link java.util.Map} avec les {@link IClient} en value et un {@link Integer} en tant que clef unique
+	 */
 	public Map<Integer, Personne> listClients() {
 		Collection<Personne> colaborateurs = new ArrayList<Personne>();
 		colaborateurs.addAll( salaries.values() );
@@ -165,6 +198,11 @@ public class Reseau implements Serializable {
 		});
 	}
 	
+	/**
+	 * Liste les personnes ayant le role {@link IFournisseur} parmi les {@link Salarie}s, {@link Client}s et
+	 * {@link Fournisseur}s enregistres
+	 * @return une {@link java.util.Map} avec les {@link IFournisseur} en value et un {@link Integer} en tant que clef unique
+	 */
 	public Map<Integer, Personne> listFournisseurs() {
 		Collection<Personne> colaborateurs = new ArrayList<Personne>();
 		colaborateurs.addAll( salaries.values() );

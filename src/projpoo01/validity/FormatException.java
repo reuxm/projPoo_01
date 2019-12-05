@@ -1,5 +1,10 @@
 package projpoo01.validity;
 
+/**
+ * Exception levee lorsqu'une donnee incorecte est saisie
+ * 
+ * @author matthias
+ */
 public class FormatException extends Exception {
 
 	/**
