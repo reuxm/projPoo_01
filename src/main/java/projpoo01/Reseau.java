@@ -190,12 +190,10 @@ public class Reseau implements Serializable {
 		colaborateurs.addAll( salaries.values() );
 		colaborateurs.addAll( clients.values() );
 		colaborateurs.addAll( fournisseurs.values() );
-		return new PersonneComposer<Personne>().numericLabel(colaborateurs, new Function<Personne, Boolean>() {
-			@Override
-			public Boolean apply(Personne arg0) {
-				return arg0 instanceof IClient && ((IClient)arg0).isClient();
-			}
-		});
+		return new PersonneComposer<Personne>().numericLabel(
+			colaborateurs,
+			personne->( personne instanceof IClient ) && ( ((IClient)personne).isClient() )
+		);
 	}
 	
 	/**
@@ -208,12 +206,10 @@ public class Reseau implements Serializable {
 		colaborateurs.addAll( salaries.values() );
 		colaborateurs.addAll( clients.values() );
 		colaborateurs.addAll( fournisseurs.values() );
-		return new PersonneComposer<Personne>().numericLabel(colaborateurs, new Function<Personne, Boolean>() {
-			@Override
-			public Boolean apply(Personne arg0) {
-				return arg0 instanceof IFournisseur && ((IFournisseur)arg0).isFournisseur();
-			}
-		});
+		return new PersonneComposer<Personne>().numericLabel(
+			colaborateurs,
+			personne->( personne instanceof IFournisseur ) && ( ((IFournisseur)personne).isFournisseur() )
+		);
 	}
 
 }

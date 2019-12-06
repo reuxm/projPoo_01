@@ -18,12 +18,7 @@ public class PersonneComposer<T extends Personne> implements ListLabeler<Personn
 
 	@Override
 	public Map<Integer, Personne> numericLabel(Collection<? extends Personne> personnes) {
-		return numericLabel(personnes, new Function<Personne, Boolean>() {
-			@Override
-			public Boolean apply(Personne arg0) {
-				return true;
-			}
-		});
+		return numericLabel( personnes, p->true );
 	}
 
 	@Override
