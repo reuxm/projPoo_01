@@ -70,12 +70,12 @@ public class Menu {
 			"Promouvoir une salarie",
 			"Annuler"
 		};
-		MenuAction[] values = {//TODO couldn't saisie update patron by itself?
-			()->reseau.setPatron( saisie.saisiePatron() ),
-			()->reseau.setPatron( saisie.choosePatron() ),
+		MenuAction[] actions = {
+			()->saisie.saisiePatron(),
+			()->saisie.choosePatron(),
 			()->{;}//do nothing = quit
 		};
-		pick(keys, values, 1, false);
+		pick(keys, actions, 1, false);
 	}
 	
 	private void actionClients() {
@@ -93,7 +93,7 @@ public class Menu {
 			"payer",
 			"annuler"
 		};
-		MenuAction[] values = {
+		MenuAction[] actions = {
 			()->client.achete( saisie.saisieAchats() ),
 			()->{
 				System.out.println(client);
@@ -102,7 +102,7 @@ public class Menu {
 			()->client.paie(),
 			()->{;}//do nothing = quit
 		};
-		pick(keys, values, 1, true);
+		pick(keys, actions, 1, true);
 	}
 	
 	private void actionFournisseur() {
@@ -123,7 +123,15 @@ public class Menu {
 			}
 		} while( !validFile );
 	}
-
+	
+	/**
+	 * Choisi un option dans la list donnee
+	 * 
+	 * @param keys le texte affiche pour chaque option
+	 * @param values l'action effectuee pour chaque option
+	 * @param level le niveau d'indentation
+	 * @param loop fait-on plusieurs actions avant de revenir au menu precedent
+	 */
 	private void pick(String[] keys, MenuAction[] values, int level, boolean loop) {
 		Map<String, MenuAction> actions = menuFrom(keys, values, level);
 

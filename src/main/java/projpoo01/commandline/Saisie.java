@@ -144,22 +144,18 @@ public class Saisie {
 	}
 
 	/**
-	 * Saisie du {@link Patron}
-	 * 
-	 * @return un {@link Salarie} qui doit etre promu par l'appelant
+	 * Saisie du {@link Patron} et ajout dans le {@link Reseau}
 	 */
-	public Salarie saisiePatron() {
+	public void saisiePatron() {
 		Salarie s = saisieSalarie("Patron");
 		//pas d'info suplémentaires à saisir - pour l'instant
-		return s;
+		reseau.setPatron( s );
 	}
 	
 	/**
-	 * Selectionne un {@link Salarie} a promouvoir {@link Patron}
-	 * 
-	 * @return l'heureux elu
+	 * Selectionne un {@link Salarie} a promouvoir {@link Patron} et modifie le {@link Reseau}
 	 */
-	public Salarie choosePatron() {
+	public void choosePatron() {
 		Map<Integer, Personne> personnes = new PersonneComposer<Salarie>().numericLabel(reseau.getSalaries().values());
 		Scanner sc = Saisie.getScanner();
 		
@@ -183,7 +179,7 @@ public class Saisie {
 			}
 		} while(nan || !validChoice);
 		
-		return (Salarie) personnes.get(choice);
+		reseau.setPatron( (Salarie) personnes.get(choice) );
 	}
 
 	private Salarie saisieSalarie(String namePrompt) {
@@ -241,7 +237,7 @@ public class Saisie {
 			new StringField("Adresse"),
 			new CPField("Code Postal"),
 			new StringField("Ville")
-		}).stream().map( field->field.saisie() ).collect(Collectors.toList()).toArray(new String[]{});
+		}).stream().map( IField::saisie ).collect(Collectors.toList()).toArray(new String[]{});
 	}
 	
 	/**
