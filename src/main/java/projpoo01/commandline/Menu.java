@@ -137,7 +137,7 @@ public class Menu {
 			}
 			choice = Saisie.getInt("Votre choix ? ");
 			try{
-				actions.get( keys[choice-1] ).act();
+				values[choice-1].act();
 			} catch (ArrayIndexOutOfBoundsException e) {
 				System.out.println("Ce n'est pas une option valide");
 			}

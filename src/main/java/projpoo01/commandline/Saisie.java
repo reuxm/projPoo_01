@@ -6,11 +6,15 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 import java.util.Map.Entry;
 
 import projpoo01.Reseau;
+import projpoo01.gestion.IField;
+import projpoo01.gestion.StringField;
 import projpoo01.gestion.item.*;
 import projpoo01.gestion.personne.*;
+import projpoo01.gestion.personne.fields.CPField;
 import projpoo01.util.PersonneComposer;
 import projpoo01.validity.*;
 
@@ -231,34 +235,13 @@ public class Saisie {
 	}
 	
 	private String[] saisiePersonne() {
-		System.out.print("Nom ? ");
-		String n = scanner.nextLine();
-		
-		System.out.print("Prenom ? ");
-		String p = scanner.nextLine();
-		
-		System.out.print("Adresse ? ");
-		String a = scanner.nextLine();
-
-		boolean validCP;
-		String cp;
-		do{
-			System.out.print("Code Postal ? ");
-			cp = scanner.nextLine();
-			try {
-				Format.checkCP(cp);//Contrainte : 5 chiffres
-				validCP = true;
-			} catch(FormatException e) {
-				System.out.println(e.getMessage());
-				validCP = false;
-			}
-		} while(!validCP);
-		
-		System.out.print("Ville ? ");
-		String v = scanner.nextLine();
-		
-		String[] data = {p, n, a, v, cp};
-		return  data;
+		return Arrays.asList(new IField[] {
+			new StringField("Nom"),
+			new StringField("Prenom"),
+			new StringField("Adresse"),
+			new CPField("Code Postal"),
+			new StringField("Ville")
+		}).stream().map( field->field.saisie() ).collect(Collectors.toList()).toArray(new String[]{});
 	}
 	
 	/**
@@ -351,6 +334,17 @@ public class Saisie {
 		return value;
 	}
 
+	public static String getString(String prompt) {
+		String value = "";
+		boolean valid = false;
+		while( !valid ) {
+			System.out.print( prompt );
+			value = scanner.nextLine();
+			valid = !value.equals( "" );
+		}
+		return value;
+	}
+
 	public static boolean getBoolean(String prompt) {
 		List<String> literalT = new ArrayList<String>(Arrays.asList("Y","y","O","o","1"));
 		List<String> literalF = new ArrayList<String>(Arrays.asList("N","n","0"));
@@ -369,6 +363,22 @@ public class Saisie {
 					System.out.print("Veuillez entrer Y ou N" );
 				}// + loop, valid is still false
 			}
+		}
+		return value;
+	}
+
+	public static String getCp(String prompt) {
+		String value = "";
+		boolean valid = false;
+		while( !valid ) {
+			System.out.print( prompt );
+			String s = scanner.nextLine();
+			try {
+				Format.checkCP(s);
+				valid = true;
+			} catch (FormatException e) {
+				System.out.println( e.getMessage() );
+			}// + loop, valid is still false
 		}
 		return value;
 	}
