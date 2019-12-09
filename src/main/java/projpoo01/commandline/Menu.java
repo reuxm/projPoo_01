@@ -1,12 +1,12 @@
 package projpoo01.commandline;
 
-import java.util.Scanner;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import projpoo01.Reseau;
 import projpoo01.gestion.personne.*;
 import projpoo01.validity.FileInteractionException;
-import projpoo01.validity.Format;
-import projpoo01.validity.FormatException;
 import projpoo01.validity.NoOptionException;
 
 /**
@@ -34,11 +34,10 @@ public class Menu {
 	}
 	
 	/**
-	 * Lance le menu
+	 * Lance le menu principal
 	 */
 	public void menu(){
-		Scanner sc = Saisie.getScanner();
-		String[] actions = {
+		String[] keys = {
 			"Saisir des Personnes",
 			"Nommer un patron",
 			"Afficher les collaborateurs",
@@ -47,45 +46,68 @@ public class Menu {
 			"Sauver",
 			"Quitter"
 		};
-		
-		int choice = -1;
-		do {
-			System.out.println("\nActions possible : ");
-			for(int i=0;i<actions.length;i++ ) {
-				System.out.println( (i+1)+"> "+actions[i] );
-			}
-			System.out.print("Votre choix ? ");
-			
-			try {
-				String choiceLiteral = sc.nextLine();
-				choice = Integer.parseInt(choiceLiteral);
-			} catch(NumberFormatException e) {
-				System.out.println("Entrez un nombre SVP");
-			}
-			
-			switch(choice) {
-				case 1 : //saisir des personnes
-					saisie.saisieInitiale();
-					break;
-				case 2 ://nommer un patron
-					patron(sc);
-					break;
-				case 3 ://afficher les listes
-					System.out.println( reseau );
-					break;
-				case 4 :
-					actionClients();
-					break;
-				case 5 ://action fournisseurs
-					actionFournisseur();
-					break;
-				case 6 ://save & quit
-					save();
-					break;
-				case 7 : break;//quit
-				default : System.out.println("Ce n'est pas une option valide");
-			}
-		} while(choice!=actions.length);
+		MenuAction[] actions = {
+			()->saisie.saisieInitiale(),
+			()->patron(),
+			()->System.out.println( reseau ),
+			()->actionClients(),
+			()->actionFournisseur(),
+			()->save(),
+			()->{;}//do nothing = quit
+		};
+		pick(keys, actions, 0);
+	}
+
+	private void patron() {
+		System.out.println("1> Nommer un patron");
+		if(reseau.getPatron()!=null) {
+			System.out.println("ATTENTION : ");
+			boolean confirme = Saisie.getBoolean("Un patron existe deja. Voulez vous le remplacer ? [Y/N]");
+			if(!confirme) { return; }
+		}
+
+		String[] keys = {
+			"Creer un patron",
+			"Promouvoir une salarie",
+			"Annuler"
+		};
+		MenuAction[] values = {//TODO couldn't saisie update patron by itself?
+			()->reseau.setPatron( saisie.saisiePatron() ),
+			()->reseau.setPatron( saisie.choosePatron() ),
+			()->{;}//do nothing = quit
+		};
+		pick(keys, values, 1);
+	}
+	
+	private void actionClients() {
+		IClient client;
+		try {
+			client = saisie.selectIClient();
+		} catch (NoOptionException e) {
+			System.out.println( e.getMessage() );
+			return;
+		}
+
+		String[] keys = {
+			"faire des achats",
+			"consulter historique",
+			"payer",
+			"annuler"
+		};
+		MenuAction[] values = {
+			()->client.achete( saisie.saisieAchats() ),
+			()->{
+				System.out.println(client);
+				((Personne)client).printHisto();
+			},
+			()->client.paie(),
+			()->{;}//do nothing = quit
+		};
+		pick(keys, values, 1);
+	}
+	
+	private void actionFournisseur() {
+		System.out.println("Pas encore implementé m(_ _)m");
 	}
 
 	private void save() {
@@ -103,123 +125,46 @@ public class Menu {
 		} while( !validFile );
 	}
 
-	private void patron(Scanner sc) {
-		System.out.println("1> Nommer un patron");
-		if(reseau.getPatron()!=null) {
-			System.out.println("ATTENTION : Un patron existe deja. Voulez vous le remplacer ? [Y/N]");
-			boolean confirme = true;
-			boolean validB;
-			do {
-				String confirmLiteral = sc.nextLine();
-				try {
-					confirme = Format.checkBoolean(confirmLiteral);
-					validB = true;
-				} catch(FormatException e) {
-					System.out.println(e.getMessage());
-					validB = false;
-				}
-			} while(!validB);
-			if(!confirme) {
-				return;
-			}
-		}
-		
-		boolean validChoice;
-		do {
-			System.out.println("\t> Creer un patron\n"
-				+ "\t2> Promouvoir une salarie\n"
-				+ "\t3> Annuler"
-			);
-			
-			int choice = -1;
-			boolean nan;
-			do {
-				System.out.print("\tVotre choix ? ");
-				String choiceLiteral = sc.nextLine();
-				try {
-					choice = Integer.parseInt(choiceLiteral);
-					nan = false;
-				} catch(NumberFormatException e) {
-					System.out.println("Entrez un nombre SVP");
-					nan = true;
-				}
-	
-			}while(nan);
-			
-			Salarie s;
-			validChoice = true;
-			switch(choice) {
-				case 1 :
-					s = saisie.saisiePatron();
-					reseau.setPatron( s );
-					break;
-				case 2 :
-					s = saisie.choosePatron();
-					reseau.setPatron( s );
-					break;
-				case 3 ://exit
-					break;
-				default :
-					validChoice = false;
-			}	
-		}while(!validChoice);
-	}
-	
-	private void actionClients() {
-		Scanner sc = Saisie.getScanner();
-		
-		IClient client;
-		try {
-			client = saisie.selectIClient();
-		} catch (NoOptionException e) {
-			System.out.println( e.getMessage() );
-			return;
-		}
-		
-		String[] actions = {
-			"faire des achats",
-			"valider la commande",
-			"consulter historique",
-			"payer",
-			"annuler"
-		};
-		
+	private void pick(String[] keys, MenuAction[] values, int level) {
+		Map<String, MenuAction> actions = menuFrom(keys, values, level);
+
 		int choice = -1;
-		boolean validChoice;
-		do {
+		while( choice!=actions.size() ) {
+			
 			System.out.println("\nActions possible : ");
-			for(int i=0;i<actions.length;i++ ) {
-				System.out.println( (i+1)+"> "+actions[i] );
+			for( Entry<String, MenuAction> action : actions.entrySet() ) {
+				System.out.println( action.getKey() );
 			}
-			System.out.print("Votre choix ? ");
-			
-			try {
-				String choiceLiteral = sc.nextLine();
-				choice = Integer.parseInt(choiceLiteral);
-			} catch(NumberFormatException e) {
-				System.out.println("Entrez un nombre SVP");
+			choice = Saisie.getInt("Votre choix ? ");
+			try{
+				actions.get( keys[choice-1] ).act();
+			} catch (ArrayIndexOutOfBoundsException e) {
+				System.out.println("Ce n'est pas une option valide");
 			}
-			
-			validChoice = true;
-			switch(choice) {
-				case 1 ://faire des achats
-					client.achete( saisie.saisieAchats() );
-					break;
-				case 2 ://payer
-					client.paie();
-					break;
-				case 3 ://historique
-					System.out.println(client);
-					((Personne)client).printHisto();
-				case 4 ://annuler
-					break;
-				default :
-					validChoice = false;
-			}
-		} while(!validChoice);
+		}
 	}
 	
-	private void actionFournisseur() {
-		System.out.println("Pas encore implementé m(_ _)m");
+	/**
+	 * Cree une {@link Map} avec les clefs numerotees et indentees
+	 * 
+	 * @param keys les valeurs a formater et afficher
+	 * @param values les actions liees aux clefs
+	 * @param tabs le nombre d'indentations souhaitees
+	 * @return une {@link Map} respectant les conditions donnees
+	 * @throws ArrayIndexOutOfBoundsException si keys et values sont de taille differentes
+	 */
+	public static Map<String, MenuAction> menuFrom(String[] keys, MenuAction[]values, int tabs) throws ArrayIndexOutOfBoundsException {
+		if(keys.length != values.length) {
+			throw new ArrayIndexOutOfBoundsException("");
+		}
+		Map<String, MenuAction> actions = new HashMap<String, MenuAction>();
+		for(int i=0 ; i<keys.length ; i++) {
+			String prompt = (i+1)+"> ";
+			for(int l=0 ; l<tabs ; l++) {
+				prompt = "\t"+prompt;
+			}
+			actions.put( prompt+keys[0], values[0] );
+		}
+		return actions;
 	}
 }

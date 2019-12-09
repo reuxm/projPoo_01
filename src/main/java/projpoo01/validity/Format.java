@@ -3,10 +3,7 @@ package projpoo01.validity;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
@@ -87,39 +84,6 @@ public class Format {
 	public static void checkPK(String key, Set<String> keySet, String nomage) throws FormatException {
 		if(keySet.contains(key) ) {
 			throw new FormatException("Le "+nomage+" existe deja associe a une autre personne ou entite");
-		}
-	}
-
-	/**
-	 * Verifie que la donne d'entree est un booleen<br>
-	 * entrees acceptees pour true : Y y O o 1
-	 * entrees acceptees pour false : N n 0
-	 * 
-	 * @param txt la donne a tester
-	 * @return le booleen correspondant a l'entree
-	 * @throws FormatException si l'entree n'est pas valide
-	 */
-	public static boolean checkBoolean(String txt) throws FormatException {
-		List<String> literalT = new ArrayList<String>(Arrays.asList("Y","y","O","o","1"));
-		List<String> literalF = new ArrayList<String>(Arrays.asList("N","n","0"));
-		if(literalF.contains(txt) || literalT.contains(txt)) {
-			return literalT.contains(txt);
-		}
-		throw new FormatException("Booleen non reconnu");
-	}
-
-	/**
-	 * Verifie que l'entree est un nombre
-	 * 
-	 * @param value l'entree a tester
-	 * @return l'entree sous forme numerique
-	 * @throws FormatException si l'entree n'est pas valide
-	 */
-	public static int checkInt(String value) throws FormatException {
-		try {
-			return Integer.parseInt( value );
-		} catch (NumberFormatException e) {
-			throw new FormatException("Veuillez entrer un nombre");
 		}
 	}
 

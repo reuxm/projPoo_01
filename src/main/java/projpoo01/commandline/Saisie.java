@@ -1,6 +1,7 @@
 package projpoo01.commandline;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -96,19 +97,7 @@ public class Saisie {
 			
 			String[] newP = saisiePersonne();
 
-			boolean f = false;
-			boolean validB;
-			do{
-				System.out.print("Ce client est-il aussi un fournisseur ? [Y/N]");
-				String fournisseur = scanner.nextLine();
-				validB = true;
-				try{
-					f = Format.checkBoolean(fournisseur);
-				} catch(FormatException e) {
-					System.out.println(e.getMessage());
-					validB = false;
-				}
-			} while(!validB);
+			boolean f = getBoolean("Ce client est-il aussi un fournisseur ? [Y/N]");
 			
 			reseau.getClients().put(
 				numClient,
@@ -140,24 +129,12 @@ public class Saisie {
 			
 			String[] newP = saisiePersonne();
 
-			boolean c = false;
-			boolean validB;
-			do {
-				System.out.print("Ce fournissseur est-il aussi un client ? [Y/N]");
-				String client = scanner.nextLine();
-				try {
-					c = Format.checkBoolean(client);
-					validB = true;
-				} catch (FormatException e) {
-					System.out.println(e.getMessage());
-					validB = false;
-				}
-			} while( !validB );
+			boolean c = getBoolean("Ce fournissseur est-il aussi un client ? [Y/N]");
 				
-				reseau.getFournisseurs().put(
-					numFour,
-					new Fournisseur(newP[0], newP[1], newP[2], newP[3], newP[4], numFour, c)
-				);
+			reseau.getFournisseurs().put(
+				numFour,
+				new Fournisseur(newP[0], newP[1], newP[2], newP[3], newP[4], numFour, c)
+			);
 			
 		}
 	}
@@ -236,19 +213,7 @@ public class Saisie {
 		} while(!validSalaire);
 		String[] newP = saisiePersonne();
 		
-		boolean c = false;
-		boolean validBC;
-		do {
-			System.out.print("Ce salarie est-il aussi un client ? [Y/N]");
-			String client = scanner.nextLine();
-			try {
-				c = Format.checkBoolean(client);
-				validBC = true;
-			} catch (FormatException e) {
-				System.out.println(e.getMessage());
-				validBC = false;
-			}
-		} while(!validBC);
+		boolean c = getBoolean("Ce salarie est-il aussi un client ? [Y/N]");
 		
 		return new Salarie(newP[0], newP[1], newP[2], newP[3], newP[4], insee, salaireFormate, c);
 	}
@@ -308,19 +273,8 @@ public class Saisie {
 		do {
 			System.out.print("Intitule de l'article ? ");
 			String intitule = scanner.nextLine();
-			
-			int qte = 0;
-			boolean validNumber;
-			do{
-				System.out.print("Quantite ? ");
-				try {
-					qte = Format.checkInt( scanner.nextLine() );
-					validNumber = true;
-				} catch (FormatException e) {
-					System.out.println(e.getMessage());
-					validNumber = false;
-				}
-			} while( !validNumber );
+
+			int qte = getInt("Quantite ? ");
 			
 			Date date = new Date();;
 			boolean validDate;
@@ -337,18 +291,7 @@ public class Saisie {
 			
 			achats.add( new Achat( date, intitule, qte) );
 			
-			boolean validB;
-			do {
-				System.out.print("Saisir un autre achat ? [Y/N]");
-				String literalMore = scanner.nextLine();
-				validB = true;
-				try{
-					more = Format.checkBoolean( literalMore );
-				} catch(FormatException e) {
-					System.out.println(e.getMessage());
-					validB = false;
-				}
-			} while( !validB );
+			more = getBoolean("Saisir un autre achat ? [Y/N]");
 			
 		} while( more );
 		
@@ -388,5 +331,45 @@ public class Saisie {
 		} while( nan || !validChoice );
 		
 		return (IClient)clients.get(clientKey);
+	}
+
+	public static int getInt(String prompt) {
+		int value = 0;
+		boolean valid = false;
+		while( !valid ) {
+			System.out.print( prompt );
+			String s = scanner.nextLine();
+			if( !s.equals( "" ) ) {
+				try {
+					value = Integer.parseInt( s );
+					valid = true;
+				} catch(NumberFormatException e) {
+					System.out.print("Veuillez entrer un nombre ");
+				}// + loop, valid is still false
+			}
+		}
+		return value;
+	}
+
+	public static boolean getBoolean(String prompt) {
+		List<String> literalT = new ArrayList<String>(Arrays.asList("Y","y","O","o","1"));
+		List<String> literalF = new ArrayList<String>(Arrays.asList("N","n","0"));
+		
+		boolean value = false;
+		boolean valid = false;
+		while( !valid ) {
+			System.out.print( prompt );
+			String s = scanner.nextLine();
+			if( !s.equals( "" ) ) {
+				if(literalF.contains(s) || literalT.contains(s)) {
+					value = literalT.contains(s);
+					valid = true;
+				}
+				else {
+					System.out.print("Veuillez entrer Y ou N" );
+				}// + loop, valid is still false
+			}
+		}
+		return value;
 	}
 }

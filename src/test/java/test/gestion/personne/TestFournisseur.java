@@ -8,7 +8,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import projpoo01.gestion.item.Achat;
-import projpoo01.gestion.personne.Client;
 import projpoo01.gestion.personne.Fournisseur;
 
 public class TestFournisseur {

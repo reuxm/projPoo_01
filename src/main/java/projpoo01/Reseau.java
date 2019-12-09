@@ -12,7 +12,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
-import java.util.function.Function;
 
 import projpoo01.commandline.*;
 import projpoo01.gestion.personne.*;
