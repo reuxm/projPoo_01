@@ -2,7 +2,6 @@ package projpoo01.commandline;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import projpoo01.Reseau;
 import projpoo01.gestion.personne.*;
@@ -55,7 +54,7 @@ public class Menu {
 			()->save(),
 			()->{;}//do nothing = quit
 		};
-		pick(keys, actions, 0);
+		pick(keys, actions, 0, true);
 	}
 
 	private void patron() {
@@ -76,7 +75,7 @@ public class Menu {
 			()->reseau.setPatron( saisie.choosePatron() ),
 			()->{;}//do nothing = quit
 		};
-		pick(keys, values, 1);
+		pick(keys, values, 1, false);
 	}
 	
 	private void actionClients() {
@@ -103,7 +102,7 @@ public class Menu {
 			()->client.paie(),
 			()->{;}//do nothing = quit
 		};
-		pick(keys, values, 1);
+		pick(keys, values, 1, true);
 	}
 	
 	private void actionFournisseur() {
@@ -125,19 +124,18 @@ public class Menu {
 		} while( !validFile );
 	}
 
-	private void pick(String[] keys, MenuAction[] values, int level) {
+	private void pick(String[] keys, MenuAction[] values, int level, boolean loop) {
 		Map<String, MenuAction> actions = menuFrom(keys, values, level);
 
 		int choice = -1;
 		while( choice!=actions.size() ) {
 			
 			System.out.println("\nActions possible : ");
-			for( Entry<String, MenuAction> action : actions.entrySet() ) {
-				System.out.println( action.getKey() );
-			}
+			actions.keySet().stream().sorted().forEach( System.out::println );
 			choice = Saisie.getInt("Votre choix ? ");
 			try{
 				values[choice-1].act();
+				if(!loop) { break;}
 			} catch (ArrayIndexOutOfBoundsException e) {
 				System.out.println("Ce n'est pas une option valide");
 			}
@@ -163,7 +161,7 @@ public class Menu {
 			for(int l=0 ; l<tabs ; l++) {
 				prompt = "\t"+prompt;
 			}
-			actions.put( prompt+keys[0], values[0] );
+			actions.put( prompt+keys[i], values[i] );
 		}
 		return actions;
 	}
